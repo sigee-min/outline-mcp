@@ -1,12 +1,12 @@
-# @sigeemin/outline-mcp
+# @sigee-min/outline-mcp
 
 TypeScript MCP (`stdio`) server for Outline Cloud and self-hosted Outline.
 
-[![npm version](https://img.shields.io/npm/v/%40sigeemin%2Foutline-mcp?label=npm&logo=npm)](https://www.npmjs.com/package/@sigeemin/outline-mcp)
+[![npm version](https://img.shields.io/npm/v/%40sigee-min%2Foutline-mcp?label=npm&logo=npm)](https://www.npmjs.com/package/@sigee-min/outline-mcp)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](../../LICENSE)
-[![CI](https://github.com/sigee-min/outline-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/sigee-min/outline-mcp/actions/workflows/ci.yml)
-[![Docker](https://img.shields.io/badge/docker-no%20official%20image-lightgrey?logo=docker)](https://github.com/sigee-min/outline-mcp)
+[![CI](https://github.com/sigee-min-min/outline-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/sigee-min-min/outline-mcp/actions/workflows/ci.yml)
+[![Docker](https://img.shields.io/badge/docker-no%20official%20image-lightgrey?logo=docker)](https://github.com/sigee-min-min/outline-mcp)
 
 ## What Is Outline?
 
@@ -42,7 +42,7 @@ This package exposes that workspace through MCP so agents can interact with Outl
 ## Local Development
 
 ```bash
-pnpm --filter @sigeemin/outline-mcp dev
+pnpm --filter @sigee-min/outline-mcp dev
 ```
 
 ## Tool Surface
@@ -72,7 +72,7 @@ pnpm --filter @sigeemin/outline-mcp dev
 ## Inspector E2E
 
 ```bash
-OUTLINE_API_KEY=... pnpm --filter @sigeemin/outline-mcp e2e:inspector
+OUTLINE_API_KEY=... pnpm --filter @sigee-min/outline-mcp e2e:inspector
 ```
 
 - Loads `.env`, `.env.local`, `.env.e2e` from repo root, then `apps/mcp`

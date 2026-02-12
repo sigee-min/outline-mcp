@@ -16,14 +16,14 @@ Before installing, make sure you have:
 This is the fastest path for most users.
 
 ```bash
-npm i -g @sigeemin/outline-mcp
+npm i -g @sigee-min/outline-mcp
 outline-mcp
 ```
 
 If you do not want a global install, run directly:
 
 ```bash
-npx -y @sigeemin/outline-mcp
+npx -y @sigee-min/outline-mcp
 ```
 
 ## Option B: Run from source (monorepo)
@@ -34,8 +34,8 @@ Use this when you want to develop or customize locally.
 git clone <repo-url>
 cd outline-mcp
 pnpm install
-pnpm --filter @sigeemin/outline-mcp build
-pnpm --filter @sigeemin/outline-mcp dev
+pnpm --filter @sigee-min/outline-mcp build
+pnpm --filter @sigee-min/outline-mcp dev
 ```
 
 ## Required environment variables
@@ -55,7 +55,7 @@ For self-hosted Outline, set `OUTLINE_BASE_URL` to your own endpoint.
 After build, validate that the package can expose tools:
 
 ```bash
-pnpm --filter @sigeemin/outline-mcp build
+pnpm --filter @sigee-min/outline-mcp build
 pnpm -s dlx @modelcontextprotocol/inspector --cli node apps/mcp/dist/index.js --method tools/list
 ```
 

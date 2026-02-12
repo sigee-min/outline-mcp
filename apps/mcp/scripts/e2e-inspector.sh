@@ -418,7 +418,7 @@ cleanup_resources() {
 trap cleanup_resources EXIT
 
 echo "[e2e] building mcp server"
-pnpm --filter @sigeemin/outline-mcp build >/dev/null
+pnpm --filter @sigee-min/outline-mcp build >/dev/null
 
 echo "[e2e] discovering tools"
 TOOLS_JSON="$(run_inspector --method tools/list)"

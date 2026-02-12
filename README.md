@@ -3,11 +3,11 @@
 A production-focused MCP (`stdio`) server for Outline.
 Use it from MCP clients (Codex, Claude Desktop, Cursor, etc.) via npm without cloning this repo.
 
-[![npm version](https://img.shields.io/npm/v/%40sigeemin%2Foutline-mcp?label=npm&logo=npm)](https://www.npmjs.com/package/@sigeemin/outline-mcp)
+[![npm version](https://img.shields.io/npm/v/%40sigee-min%2Foutline-mcp?label=npm&logo=npm)](https://www.npmjs.com/package/@sigee-min/outline-mcp)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
-[![CI](https://github.com/sigee-min/outline-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/sigee-min/outline-mcp/actions/workflows/ci.yml)
-[![Docker](https://img.shields.io/badge/docker-no%20official%20image-lightgrey?logo=docker)](https://github.com/sigee-min/outline-mcp)
+[![CI](https://github.com/sigee-min-min/outline-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/sigee-min-min/outline-mcp/actions/workflows/ci.yml)
+[![Docker](https://img.shields.io/badge/docker-no%20official%20image-lightgrey?logo=docker)](https://github.com/sigee-min-min/outline-mcp)
 
 ## What Is Outline?
 
@@ -21,7 +21,7 @@ It is commonly used for internal docs, runbooks, product specs, onboarding guide
 Package:
 
 ```bash
-npm i -g @sigeemin/outline-mcp
+npm i -g @sigee-min/outline-mcp
 ```
 
 Run:
@@ -33,7 +33,7 @@ outline-mcp
 Or run without global install:
 
 ```bash
-npx -y @sigeemin/outline-mcp
+npx -y @sigee-min/outline-mcp
 ```
 
 ## MCP Client Config (Copy/Paste)
@@ -43,7 +43,7 @@ npx -y @sigeemin/outline-mcp
   "mcpServers": {
     "outline": {
       "command": "npx",
-      "args": ["-y", "@sigeemin/outline-mcp"],
+      "args": ["-y", "@sigee-min/outline-mcp"],
       "env": {
         "OUTLINE_API_KEY": "your_api_key",
         "OUTLINE_BASE_URL": "https://app.getoutline.com",
@@ -180,8 +180,8 @@ For full tool parameters and response examples, see [`apps/mcp/README.md`](apps/
 git clone <repo-url>
 cd outline-mcp
 pnpm install
-pnpm --filter @sigeemin/outline-mcp build
-pnpm --filter @sigeemin/outline-mcp dev
+pnpm --filter @sigee-min/outline-mcp build
+pnpm --filter @sigee-min/outline-mcp dev
 ```
 
 ## Testing

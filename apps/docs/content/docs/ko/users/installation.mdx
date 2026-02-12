@@ -16,14 +16,14 @@ description: npm 설치 또는 소스 실행으로 outline-mcp를 재현 가능�
 대부분의 사용자에게 가장 빠른 방법입니다.
 
 ```bash
-npm i -g @sigeemin/outline-mcp
+npm i -g @sigee-min/outline-mcp
 outline-mcp
 ```
 
 글로벌 설치 없이 바로 실행하려면 아래를 사용하세요.
 
 ```bash
-npx -y @sigeemin/outline-mcp
+npx -y @sigee-min/outline-mcp
 ```
 
 ## 옵션 B: 소스 실행 (모노레포)
@@ -34,8 +34,8 @@ npx -y @sigeemin/outline-mcp
 git clone <repo-url>
 cd outline-mcp
 pnpm install
-pnpm --filter @sigeemin/outline-mcp build
-pnpm --filter @sigeemin/outline-mcp dev
+pnpm --filter @sigee-min/outline-mcp build
+pnpm --filter @sigee-min/outline-mcp dev
 ```
 
 ## 필수 환경변수
@@ -55,7 +55,7 @@ Self-hosted 환경이라면 `OUTLINE_BASE_URL`을 내부 엔드포인트로 바�
 빌드 후 도구 노출을 확인하려면:
 
 ```bash
-pnpm --filter @sigeemin/outline-mcp build
+pnpm --filter @sigee-min/outline-mcp build
 pnpm -s dlx @modelcontextprotocol/inspector --cli node apps/mcp/dist/index.js --method tools/list
 ```
 

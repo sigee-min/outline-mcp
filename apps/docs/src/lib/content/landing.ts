@@ -55,7 +55,7 @@ const contentByLocale: Record<Locale, LandingCopy> = {
     workflowSteps: [
       {
         title: 'Install and connect',
-        description: 'Add @sigeemin/outline-mcp to your MCP client using npx or global install.',
+        description: 'Add @sigee-min/outline-mcp to your MCP client using npx or global install.',
       },
       {
         title: 'Apply environment policy',
@@ -111,7 +111,7 @@ const contentByLocale: Record<Locale, LandingCopy> = {
     workflowSteps: [
       {
         title: '설치 및 연결',
-        description: 'npx 또는 글로벌 설치로 @sigeemin/outline-mcp를 MCP 클라이언트에 연결합니다.',
+        description: 'npx 또는 글로벌 설치로 @sigee-min/outline-mcp를 MCP 클라이언트에 연결합니다.',
       },
       {
         title: '환경 정책 적용',
