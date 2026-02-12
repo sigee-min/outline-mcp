@@ -1,45 +1,76 @@
 ---
 title: 멀티 에이전트 운영
-description: 동시 수정, 소유권, 운영 제어를 위한 실전 패턴입니다.
+description: 동시 작업 환경에서 정확성과 일관성을 유지하기 위한 실전 운영 패턴입니다.
 ---
 
-## 패턴 1: revision-safe update 루프
+## 멀티 에이전트 전략이 필요한 이유
 
-1. `read_document`
-2. `revision` 확인
-3. `safe_update_document(expected_revision=...)` 호출
-4. 충돌 시 재조회/머지/재시도
+여러 워커가 같은 문서를 수정할 수 있는 환경에서는 덮어쓰기, 중복 작업, 소유권 충돌 같은 문제가 쉽게 발생합니다.
 
-이 흐름은 동시 편집에서 silent overwrite를 방지합니다.
+이 문제를 줄이려면 역할 분리, revision 검증, lease 소유권을 함께 설계해야 합니다.
 
-## 패턴 2: hot document lease 제어
+## 패턴 1: 역할 기반 제어 평면
 
-여러 워커가 같은 문서를 동시에 다룰 수 있다면 lease 도구를 기본으로 사용하세요.
+실무에서 안정적인 역할 분리는 보통 다음과 같습니다.
+
+- Coordinator: 작업 계획 수립, 순서 결정, 소유권 할당
+- Worker: 문서 단위 실행
+- Auditor: 리비전/이벤트/export 결과 검증
+
+역할을 분리하면 권한 중복이 줄고 책임 경계가 명확해집니다.
+
+## 패턴 2: Revision-safe 쓰기 루프
+
+문서 쓰기 시에는 아래 루프를 기준으로 운영하세요.
+
+1. `read_document`로 revision을 확인합니다.
+2. 변경 내용을 계산합니다.
+3. `safe_update_document(expected_revision=...)`를 호출합니다.
+4. 충돌 시 재조회/머지 후 재시도합니다.
+
+이 루프는 동시 편집 상황에서 조용한 덮어쓰기를 방지합니다.
+
+## 패턴 3: Hot document lease 제어
+
+경합 문서에는 lease를 기본으로 적용하세요.
 
 - `acquire_document_lease`
 - `renew_document_lease`
 - `release_document_lease`
 - `get_active_document_lease`
 
-프로세스 간 조정이 필요하면:
+프로세스 간 동기화가 필요하면 아래 설정을 권장합니다.
 
 ```bash
 OUTLINE_LEASE_STRATEGY=data_attribute
 OUTLINE_LEASE_ATTRIBUTE_ID=your_data_attribute_id
 ```
 
-## 패턴 3: 역할 분리
+## 패턴 4: 배치 실행 경계 설정
 
-| 역할 | 담당 |
-|---|---|
-| Coordinator | 컬렉션/템플릿 오케스트레이션, 작업 분배 |
-| Worker | 문서 단위 쓰기 작업 |
-| Auditor | 이벤트/리비전/export 검증 |
+배치 도구는 처리량을 높이지만, 경계가 없으면 사고 범위가 커집니다.
 
-역할을 분리하면 권한 범위가 명확해지고 실수 가능성이 줄어듭니다.
+배치 실행 전에는 반드시 다음을 확인하세요.
+
+- 대상 범위와 순서가 명확한가
+- 실패 시 재시도/복구 전략이 준비되었는가
+- 실행 주체 권한이 맞는가
+
+## 패턴 5: Resource 기반 컨텍스트 선조회
+
+변경 전에 아래 리소스로 컨텍스트를 먼저 확보하세요.
+
+- `outline://collection/{collection_id}/tree`
+- `outline://document/{document_id}`
+- `outline://document/{document_id}/backlinks`
+
+이 과정을 넣으면 계획 단계에서 누락되는 문맥을 줄일 수 있습니다.
 
 ## 장애 대응 체크리스트
 
-- 충돌 급증: `safe_update_document` 경로 적용 여부 확인
-- lease 정체: TTL/renew 주기 점검
-- 예기치 않은 변경: 클라이언트별 `OUTLINE_ALLOWED_ACTIONS` 재검증
+문제가 발생하면 아래 순서로 점검하세요.
+
+1. 권한 프로파일과 호출 의도를 확인합니다.
+2. 이벤트/리비전으로 최근 변경을 확인합니다.
+3. 경합 문서의 lease 상태를 확인합니다.
+4. 충돌 원인 정리 후 재실행합니다.

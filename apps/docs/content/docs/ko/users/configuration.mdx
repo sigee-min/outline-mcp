@@ -1,35 +1,48 @@
 ---
 title: 환경 설정
-description: 런타임 변수, 기본값, 운영 프로파일을 정리합니다.
+description: 런타임 설정 전체를 운영 관점에서 이해하고 적용하는 방법입니다.
 ---
 
-## 핵심 변수
+## 핵심 런타임 변수
 
-| 변수 | 기본값 | 변경 시점 |
-|---|---|---|
-| `OUTLINE_API_KEY` | 필수 | 항상 설정 |
-| `OUTLINE_BASE_URL` | `https://app.getoutline.com` | self-hosted 사용 시 |
-| `OUTLINE_ALLOWED_ACTIONS` | `read,write,delete` | 에이전트 역할 분리 시 |
-| `OUTLINE_REQUEST_TIMEOUT_MS` | `15000` | 네트워크 지연/정책 강화 시 |
-| `OUTLINE_RETRY_COUNT` | `2` | 업스트림 불안정 구간 대응 시 |
-| `OUTLINE_ENABLE_CAPABILITY_PROBE` | `true` | probe 비활성화가 필요한 특수 상황 |
+| 변수 | 기본값 | 필수 여부 | 설명 |
+|---|---|---|---|
+| `OUTLINE_API_KEY` | 없음 | 필수 | Outline API 호출에 필요 |
+| `OUTLINE_BASE_URL` | `https://app.getoutline.com` | 선택 | Self-hosted 사용 시 변경 |
+| `OUTLINE_ALLOWED_ACTIONS` | `read,write,delete` | 선택 | `read`, `write`, `delete`, `admin` 지원 |
+| `OUTLINE_REQUEST_TIMEOUT_MS` | `15000` | 선택 | 요청 타임아웃(ms) |
+| `OUTLINE_RETRY_COUNT` | `2` | 선택 | 일시적 오류 재시도 횟수 |
+| `OUTLINE_ENABLE_CAPABILITY_PROBE` | `true` | 선택 | 시작 시 optional endpoint 탐지 |
 
 ## Lease 변수
 
+| 변수 | 기본값 | 필수 여부 | 설명 |
+|---|---|---|---|
+| `OUTLINE_LEASE_STRATEGY` | `auto` | 선택 | `auto`, `memory`, `data_attribute` |
+| `OUTLINE_LEASE_ATTRIBUTE_ID` | 없음 | 조건부 | `data_attribute` 사용 시 필수 |
+| `OUTLINE_LEASE_DEFAULT_TTL_SECONDS` | `600` | 선택 | 기본 lease TTL |
+| `OUTLINE_LEASE_MAX_TTL_SECONDS` | `7200` | 선택 | lease 최대 TTL |
+
+## E2E 관련 변수
+
+아래 변수는 주로 `pnpm e2e:mcp` 및 CI E2E에서 사용합니다.
+
 | 변수 | 기본값 | 설명 |
 |---|---|---|
-| `OUTLINE_LEASE_STRATEGY` | `auto` | `auto`, `memory`, `data_attribute` |
-| `OUTLINE_LEASE_ATTRIBUTE_ID` | 없음 | `data_attribute`에서 필수 |
-| `OUTLINE_LEASE_DEFAULT_TTL_SECONDS` | `600` | 기본 lease TTL |
-| `OUTLINE_LEASE_MAX_TTL_SECONDS` | `7200` | lease 최대 TTL |
+| `OUTLINE_E2E_RUN_WRITE` | `true` (스크립트 기본) | write 시나리오 on/off |
+| `OUTLINE_E2E_COLLECTION_ID` | 비어 있음 | 고정 테스트 컬렉션 |
+| `OUTLINE_E2E_EXPORT_COLLECTION_ID` | 비어 있음 | export 시나리오 대상 |
+| `OUTLINE_E2E_MEMBER_COLLECTION_ID` | 비어 있음 | 멤버십 시나리오 대상 |
+| `OUTLINE_E2E_MEMBER_USER_ID` | 비어 있음 | 사용자 멤버십 시나리오 |
+| `OUTLINE_E2E_MEMBER_GROUP_ID` | 비어 있음 | 그룹 멤버십 시나리오 |
+| `OUTLINE_E2E_EXPORT_ALL` | `false` | export_all 시나리오 사용 여부 |
 
-## 실무 프로파일 예시
+## 운영 프로파일 예시
 
-### Read-only 어시스턴트
+### Reader
 
 ```bash
 OUTLINE_ALLOWED_ACTIONS=read
-OUTLINE_ENABLE_CAPABILITY_PROBE=true
 ```
 
 ### Writer
@@ -44,12 +57,18 @@ OUTLINE_ALLOWED_ACTIONS=read,write
 OUTLINE_ALLOWED_ACTIONS=read,write,delete
 ```
 
-### 다중 프로세스 lease 제어
+### 다중 프로세스 lease 운영
 
 ```bash
 OUTLINE_LEASE_STRATEGY=data_attribute
 OUTLINE_LEASE_ATTRIBUTE_ID=your_data_attribute_id
 ```
+
+## 설정 운영 팁
+
+- 역할별로 별도 프로파일을 고정해 혼합 사용을 피하세요.
+- 삭제 권한은 기본값이 아니라 운영 권한으로 취급하세요.
+- capability probe는 대부분의 환경에서 켜두는 것이 안전합니다.
 
 ## 다음 단계
 

@@ -1,45 +1,71 @@
 ---
 title: 테스트와 E2E
-description: 배포 전 정확성을 검증하고 회귀 위험을 줄이는 방법입니다.
+description: 로컬과 CI에서 안정적으로 회귀를 감시하는 검사 체계를 설명합니다.
 ---
+
+## 검증 레이어
+
+이 프로젝트의 실무 검증은 4단계로 운영하는 것이 좋습니다.
+
+1. Lint
+2. Typecheck
+3. Unit test
+4. Inspector 기반 E2E
 
 ## 로컬 기본 검증
 
+PR 전에 아래 명령을 권장합니다.
+
 ```bash
-pnpm test
+pnpm lint
 pnpm typecheck
+pnpm test
 pnpm build
 ```
 
-## 전체 E2E 실행
+## 로컬 MCP E2E 실행
+
+전체 통합 시나리오를 실행하려면:
 
 ```bash
 pnpm e2e:mcp
 ```
 
-## E2E에서 검증하는 것
+## E2E 스크립트에서 확인하는 항목
 
-- 권한 매트릭스 동작
+현재 E2E는 운영에서 중요한 동작을 중심으로 검증합니다.
+
+- 권한 매트릭스 경계
 - safe update 충돌 처리
-- 댓글/export 흐름
-- 멤버십 시나리오(대상 ID 설정 시)
-- 테스트 후 cleanup 정책
+- lease 경합 처리(지원 시)
+- 댓글/내보내기 흐름
+- 멤버십 왕복 시나리오(대상 ID 설정 시)
+- 종료 시 cleanup 롤백
 
-## 자주 쓰는 E2E 변수
+## 자주 사용하는 E2E 변수
 
 | 변수 | 용도 |
 |---|---|
+| `OUTLINE_API_KEY` | Outline 대상 E2E 실행 필수 |
+| `OUTLINE_BASE_URL` | Cloud 또는 self-hosted 엔드포인트 |
 | `OUTLINE_E2E_RUN_WRITE` | write 시나리오 on/off |
-| `OUTLINE_E2E_COLLECTION_ID` | 고정 테스트 컬렉션 (옵션) |
-| `OUTLINE_E2E_EXPORT_COLLECTION_ID` | export 대상 컬렉션 |
+| `OUTLINE_E2E_COLLECTION_ID` | 고정 테스트 컬렉션 |
+| `OUTLINE_E2E_EXPORT_COLLECTION_ID` | export 시나리오 대상 |
 | `OUTLINE_E2E_MEMBER_COLLECTION_ID` | 멤버십 시나리오 대상 |
-| `OUTLINE_E2E_MEMBER_USER_ID` | user 멤버십 시나리오 |
-| `OUTLINE_E2E_MEMBER_GROUP_ID` | group 멤버십 시나리오 |
+| `OUTLINE_E2E_MEMBER_USER_ID` | 사용자 멤버십 시나리오 |
+| `OUTLINE_E2E_MEMBER_GROUP_ID` | 그룹 멤버십 시나리오 |
 
-`OUTLINE_E2E_COLLECTION_ID`가 없으면 임시 컬렉션을 자동 생성/정리합니다.
+`OUTLINE_E2E_COLLECTION_ID`가 없고 write 모드가 켜져 있으면 임시 컬렉션을 생성/정리하는 방식으로 실행됩니다.
 
-## CI 권장사항
+## CI 동작 방식
 
-- typecheck + test는 항상 실행
-- 보호 브랜치에서 E2E 실행
-- write E2E는 격리된 테스트 워크스페이스에서만 사용
+CI에는 조건부 E2E 잡이 포함되어 있습니다.
+
+- 저장소 시크릿 `OUTLINE_API_KEY`가 있으면 E2E가 실행됩니다.
+- 시크릿이 없으면 E2E는 스킵되고, 기본 CI 검증은 계속 진행됩니다.
+- 격리된 테스트 워크스페이스가 없다면 CI에서는 `OUTLINE_E2E_RUN_WRITE=false`를 권장합니다.
+
+## GitHub 설정 권장값
+
+- Secret: `OUTLINE_API_KEY`
+- 선택 Variables: `OUTLINE_BASE_URL`, `OUTLINE_E2E_RUN_WRITE`, `OUTLINE_E2E_COLLECTION_ID`, `OUTLINE_E2E_MEMBER_COLLECTION_ID`, `OUTLINE_E2E_MEMBER_USER_ID`, `OUTLINE_E2E_MEMBER_GROUP_ID`

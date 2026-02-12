@@ -1,9 +1,11 @@
 ---
 title: MCP Client Setup
-description: Configure your MCP client with a clean, reproducible baseline.
+description: Configure MCP clients with safe defaults and environment-specific profiles.
 ---
 
-## Baseline config
+## Baseline configuration
+
+Use this as your default MCP server entry:
 
 ```json
 {
@@ -21,9 +23,11 @@ description: Configure your MCP client with a clean, reproducible baseline.
 }
 ```
 
-## Environment variants
+## Safer rollout profiles
 
-### Read-only
+Start with one of these profiles depending on your risk tolerance.
+
+### Read-only profile
 
 ```json
 {
@@ -31,7 +35,7 @@ description: Configure your MCP client with a clean, reproducible baseline.
 }
 ```
 
-### Read/write (no delete)
+### Read and write profile (no delete)
 
 ```json
 {
@@ -39,7 +43,7 @@ description: Configure your MCP client with a clean, reproducible baseline.
 }
 ```
 
-### Self-hosted Outline
+### Self-hosted Outline profile
 
 ```json
 {
@@ -47,13 +51,18 @@ description: Configure your MCP client with a clean, reproducible baseline.
 }
 ```
 
-## Recommended rollout sequence
+## Recommended validation sequence
 
-1. Start with `read`
-2. Verify tool discovery and read paths
-3. Move to `read,write`
-4. Add `delete` only after your team approves deletion policy
+After adding client config, validate in this order:
+
+1. `list_collections`
+2. `search_documents`
+3. `read_document`
+4. `create_document` and `update_document` (only after write is enabled)
+5. lifecycle and batch tools (only after policy approval)
+
+This sequence gives you quick signal on auth, reachability, and permission boundaries.
 
 ## Next step
 
-Go to [Configuration](/en/docs/users/configuration).
+Continue to [Configuration](/en/docs/users/configuration).

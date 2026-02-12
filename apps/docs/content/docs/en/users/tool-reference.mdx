@@ -1,50 +1,67 @@
 ---
 title: Tool Reference
-description: Use-case oriented map of available MCP tools.
+description: Complete, use-case-oriented reference for tools and resource URIs.
 ---
 
-## Collections
+This page groups tools by operational intent so you can choose the right API surface quickly.
+
+## Core workspace and documents
 
 | Use case | Main tools |
 |---|---|
-| Browse collections | `list_collections` |
-| Provision working space | `create_collection` |
-| Rename/retune collection settings | `update_collection` |
-| Remove collection | `delete_collection` |
+| Server runtime inspection | `server_info` |
+| Collection discovery and management | `list_collections`, `create_collection`, `update_collection`, `delete_collection` |
+| Document search and reading | `search_documents`, `read_document`, `export_document` |
+| Document writing and movement | `create_document`, `update_document`, `move_document`, `safe_update_document` |
+| Document lifecycle | `delete_document`, `archive_document`, `unarchive_document`, `restore_document`, `list_archived_documents`, `list_trash` |
 
-## Documents
-
-| Use case | Main tools |
-|---|---|
-| Find and read docs | `search_documents`, `read_document` |
-| Create new docs | `create_document` |
-| Edit existing docs | `update_document` |
-| Move docs across structure | `move_document` |
-| Delete docs | `delete_document` |
-| Conflict-safe update | `safe_update_document` |
-
-## Templates
+## Batch operations
 
 | Use case | Main tools |
 |---|---|
-| List reusable templates | `list_templates` |
-| Convert document to template | `create_template_from_document` |
-| Create doc from template | `create_document_from_template` |
+| Create many documents | `batch_create_documents` |
+| Update many documents | `batch_update_documents` |
+| Move many documents | `batch_move_documents` |
+| Archive many documents | `batch_archive_documents` |
+| Delete many documents | `batch_delete_documents` |
 
-## Collaboration
-
-| Use case | Main tools |
-|---|---|
-| Comment lifecycle | `list_comments`, `get_comment`, `create_comment`, `update_comment`, `delete_comment` |
-| Document user/group access | `list_document_users`, `list_document_memberships`, `list_document_group_memberships`, `add_document_user`, `remove_document_user`, `add_document_group`, `remove_document_group` |
-| Collection user/group access | `list_collection_memberships`, `list_collection_group_memberships`, `add_collection_user`, `remove_collection_user`, `add_collection_group`, `remove_collection_group` |
-
-## Operations
+## Structure, references, and AI support
 
 | Use case | Main tools |
 |---|---|
-| Audit history | `list_events`, `list_revisions`, `get_revision` |
-| Export pipeline | `export_collection`, `export_all_collections`, `list_file_operations`, `get_file_operation`, `download_file_operation` |
-| Lease coordination | `acquire_document_lease`, `renew_document_lease`, `release_document_lease`, `get_active_document_lease` |
+| Inspect collection tree | `get_collection_structure` |
+| Resolve doc ID from title | `get_document_id_from_title` |
+| Find inbound links | `get_document_backlinks` |
+| Ask Outline AI over docs | `ask_ai_about_documents` |
 
-For full input/output detail, check `apps/mcp/README.md` in the repository root.
+## Templates and collaboration
+
+| Use case | Main tools |
+|---|---|
+| Template workflows | `list_templates`, `create_template_from_document`, `create_document_from_template` |
+| Comment workflows | `list_comments`, `get_comment`, `create_comment`, `update_comment`, `delete_comment` |
+| Membership management | `list_document_users`, `list_document_memberships`, `list_document_group_memberships`, `add_document_user`, `remove_document_user`, `add_document_group`, `remove_document_group`, `list_collection_memberships`, `list_collection_group_memberships`, `add_collection_user`, `remove_collection_user`, `add_collection_group`, `remove_collection_group` |
+
+## Audit, export, and lease control
+
+| Use case | Main tools |
+|---|---|
+| Audit and revisions | `list_events`, `list_revisions`, `get_revision` |
+| Export and artifact handling | `export_collection`, `export_all_collections`, `list_file_operations`, `get_file_operation`, `download_file_operation` |
+| Concurrent ownership control | `acquire_document_lease`, `renew_document_lease`, `release_document_lease`, `get_active_document_lease` |
+
+## Resource URIs
+
+These resources are useful when the model should read context directly by URI.
+
+- `outline://collection/{collection_id}`
+- `outline://collection/{collection_id}/tree`
+- `outline://collection/{collection_id}/documents`
+- `outline://document/{document_id}`
+- `outline://document/{document_id}/backlinks`
+
+## Practical guidance
+
+- Prefer read and structure tools first when planning a change.
+- Use lifecycle and batch tools only when ownership boundaries are clear.
+- Use lease plus `safe_update_document` together for multi-agent writes.

@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import type { AcquireLeaseInput, LeaseRecord, ReleaseLeaseInput, RenewLeaseInput } from "../src/domain/lease.js";
 import { LeaseValidationError } from "../src/services/lease/errors.js";
@@ -47,6 +47,42 @@ class StubLeaseStore implements LeaseStore {
 }
 
 describe("LeaseService", () => {
+  function createSpyStore(): LeaseStore & {
+    acquire: ReturnType<typeof vi.fn>;
+    renew: ReturnType<typeof vi.fn>;
+    release: ReturnType<typeof vi.fn>;
+    getActive: ReturnType<typeof vi.fn>;
+  } {
+    return {
+      backend: "memory" as const,
+      acquire: vi.fn(async (input: AcquireLeaseInput): Promise<LeaseRecord> => ({
+        documentId: input.documentId,
+        agentId: input.agentId,
+        leaseToken: "lease-token",
+        acquiredAt: new Date(0).toISOString(),
+        expiresAt: new Date(input.ttlSeconds * 1000).toISOString(),
+        backend: "memory"
+      })),
+      renew: vi.fn(async (input: RenewLeaseInput): Promise<LeaseRecord> => ({
+        documentId: input.documentId,
+        agentId: "agent-a",
+        leaseToken: input.leaseToken,
+        acquiredAt: new Date(0).toISOString(),
+        expiresAt: new Date(input.ttlSeconds * 1000).toISOString(),
+        backend: "memory"
+      })),
+      release: vi.fn(async (input: ReleaseLeaseInput): Promise<LeaseRecord> => ({
+        documentId: input.documentId,
+        agentId: "agent-a",
+        leaseToken: input.leaseToken,
+        acquiredAt: new Date(0).toISOString(),
+        expiresAt: new Date(60_000).toISOString(),
+        backend: "memory"
+      })),
+      getActive: vi.fn(async () => null)
+    };
+  }
+
   it("uses default ttl when ttlSeconds is omitted", async () => {
     const service = new LeaseService(new StubLeaseStore(), {
       defaultTtlSeconds: 600,
@@ -89,5 +125,98 @@ describe("LeaseService", () => {
         ttlSeconds: 60
       })
     ).rejects.toBeInstanceOf(LeaseValidationError);
+  });
+
+  it("throws validation error when ttlSeconds is not a positive integer", async () => {
+    const service = new LeaseService(new StubLeaseStore(), {
+      defaultTtlSeconds: 600,
+      maxTtlSeconds: 3600
+    });
+
+    await expect(
+      service.acquire({
+        documentId: "doc-1",
+        agentId: "agent-a",
+        ttlSeconds: 0
+      })
+    ).rejects.toBeInstanceOf(LeaseValidationError);
+
+    await expect(
+      service.acquire({
+        documentId: "doc-1",
+        agentId: "agent-a",
+        ttlSeconds: 1.5
+      })
+    ).rejects.toBeInstanceOf(LeaseValidationError);
+  });
+
+  it("uses default ttl for renew when ttlSeconds is omitted", async () => {
+    const store = createSpyStore();
+    const service = new LeaseService(store, {
+      defaultTtlSeconds: 900,
+      maxTtlSeconds: 3600
+    });
+
+    await service.renew({
+      documentId: "doc-10",
+      leaseToken: "lease-token"
+    });
+
+    expect(store.renew).toHaveBeenCalledWith({
+      documentId: "doc-10",
+      leaseToken: "lease-token",
+      ttlSeconds: 900
+    });
+  });
+
+  it("throws validation error when renew input is blank", async () => {
+    const service = new LeaseService(new StubLeaseStore(), {
+      defaultTtlSeconds: 600,
+      maxTtlSeconds: 3600
+    });
+
+    await expect(
+      service.renew({
+        documentId: " ",
+        leaseToken: "lease-token"
+      })
+    ).rejects.toBeInstanceOf(LeaseValidationError);
+
+    await expect(
+      service.renew({
+        documentId: "doc-1",
+        leaseToken: " "
+      })
+    ).rejects.toBeInstanceOf(LeaseValidationError);
+  });
+
+  it("throws validation error when release input is blank", async () => {
+    const service = new LeaseService(new StubLeaseStore(), {
+      defaultTtlSeconds: 600,
+      maxTtlSeconds: 3600
+    });
+
+    await expect(
+      service.release({
+        documentId: " ",
+        leaseToken: "lease-token"
+      })
+    ).rejects.toBeInstanceOf(LeaseValidationError);
+
+    await expect(
+      service.release({
+        documentId: "doc-1",
+        leaseToken: " "
+      })
+    ).rejects.toBeInstanceOf(LeaseValidationError);
+  });
+
+  it("throws validation error when getActive document id is blank", async () => {
+    const service = new LeaseService(new StubLeaseStore(), {
+      defaultTtlSeconds: 600,
+      maxTtlSeconds: 3600
+    });
+
+    await expect(service.getActive(" ")).rejects.toBeInstanceOf(LeaseValidationError);
   });
 });

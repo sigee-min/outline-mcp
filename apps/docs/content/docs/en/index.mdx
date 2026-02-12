@@ -1,31 +1,46 @@
 ---
 title: outline-mcp Docs
-description: Practical user documentation for setup, operations, and scaling with agents.
+description: Comprehensive, user-friendly documentation for installing, operating, and scaling outline-mcp in production.
 ---
 
-Welcome to the outline-mcp docs.
+Welcome to the official documentation for `outline-mcp`.
 
-This documentation is written for users who want to run Outline through MCP in real environments, not just demos.
+This guide is designed for real usage in real teams. Instead of short demo snippets, each page explains why a configuration exists, when you should use it, and how to avoid common mistakes during rollout.
 
-## What you can do here
+## What this project helps you do
 
-- Connect your MCP client in minutes
-- Apply safe permission boundaries (`read`, `write`, `delete`)
-- Run document and collection workflows with confidence
-- Operate multi-agent updates with conflict/lease controls
-- Validate behavior before rollout with E2E scenarios
+With `outline-mcp`, you can connect Outline to MCP clients and let agents perform practical work with controlled permissions.
 
-## Fast path (recommended)
+You can use it to:
 
-1. [Getting Started](/en/docs/users/getting-started)
-2. [Installation](/en/docs/users/installation)
-3. [MCP Client Setup](/en/docs/users/mcp-client-setup)
-4. [Permission Model](/en/docs/users/permission-model)
-5. [Testing and E2E](/en/docs/users/testing-and-e2e)
+- Read and search documents safely in read-only mode.
+- Create, update, move, archive, restore, and batch-manage documents.
+- Work with templates, comments, memberships, exports, and audit data.
+- Coordinate concurrent agents with revision checks and lease-based ownership.
+- Expose resource URIs so models can read collection and document context directly.
 
-## Choose your path
+## What is covered in this documentation
 
-- New users: start at [User Guide Overview](/en/docs/users)
-- Team operators: go to [Configuration](/en/docs/users/configuration)
-- Agent orchestration owners: go to [Multi-Agent Operations](/en/docs/users/multi-agent-operations)
-- Day-to-day users: keep [Tool Reference](/en/docs/users/tool-reference) open
+This documentation includes:
+
+- Installation and MCP client setup.
+- Runtime configuration and permission design.
+- Tool categories and practical usage patterns.
+- Multi-agent operation strategies.
+- Local and CI validation with inspector-based E2E testing.
+- Troubleshooting for the most common operational failures.
+
+## Recommended reading path
+
+If you are new, follow this order:
+
+1. [User Guide Overview](/en/docs/users)
+2. [Getting Started](/en/docs/users/getting-started)
+3. [Installation](/en/docs/users/installation)
+4. [MCP Client Setup](/en/docs/users/mcp-client-setup)
+5. [Configuration](/en/docs/users/configuration)
+6. [Permission Model](/en/docs/users/permission-model)
+7. [Tool Reference](/en/docs/users/tool-reference)
+8. [Testing and E2E](/en/docs/users/testing-and-e2e)
+
+If you are already operating agents in production, start with [Multi-Agent Operations](/en/docs/users/multi-agent-operations) and [Troubleshooting](/en/docs/users/troubleshooting).

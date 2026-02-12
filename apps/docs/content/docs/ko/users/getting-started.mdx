@@ -1,38 +1,45 @@
 ---
 title: 시작 가이드
-description: outline-mcp를 안전하게 도입하기 위한 첫 기준을 정리합니다.
+description: outline-mcp의 핵심 동작 모델을 이해하고 안전하게 도입하는 방법을 설명합니다.
 ---
 
-## 이 페이지 대상
+## outline-mcp란 무엇인가
 
-- outline-mcp를 처음 도입하는 사용자
-- 안전한 초기 롤아웃 전략이 필요한 팀
-- 추상 설명보다 실무 기준이 필요한 운영자
+`outline-mcp`는 Outline API 기능을 MCP 도구와 리소스로 매핑하는 서버입니다.
 
-## outline-mcp가 제공하는 것
+즉, MCP 클라이언트가 문서 조회/수정, 멤버십 관리, export, 동시 작업 제어 같은 실무 작업을 표준화된 방식으로 수행할 수 있게 해줍니다.
 
-outline-mcp는 Outline 작업을 MCP 도구로 노출해, 에이전트가 명시적 계약에 따라 동작하게 만듭니다.
+## 요청 흐름 이해하기
 
-활용 범위:
+일반적인 요청 흐름은 아래와 같습니다.
 
-- 컬렉션/문서 워크플로
-- 템플릿 기반 생성 흐름
-- 멤버십/협업 제어
-- export 및 감사 추적
+1. MCP 클라이언트가 도구를 호출합니다.
+2. `outline-mcp`가 입력과 권한을 검증합니다.
+3. 서버가 Outline API를 호출합니다.
+4. 응답을 정규화해 클라이언트로 반환합니다.
 
-## 안전한 첫 롤아웃
+권한 검증이 서버에서 일관되게 수행되기 때문에, 클라이언트별로 다른 권한 정책을 안전하게 운영할 수 있습니다.
 
-1. read-only로 클라이언트 1개 연결
-2. 기본 조회(`list_collections`, `read_document`) 검증
-3. `read,write` 확장
-4. 삭제 정책 합의 후 `delete` 허용
+## 기본 안전 모델
+
+운영 초기에 아래 3가지를 함께 적용하면 사고 확률이 크게 줄어듭니다.
+
+- `OUTLINE_ALLOWED_ACTIONS` 기반 권한 경계
+- `safe_update_document` 기반 revision 충돌 방지
+- lease 도구 기반 소유권 제어
+
+## 첫 롤아웃 권장 순서
+
+1. `read`로 시작합니다.
+2. `list_collections`, `search_documents`, `read_document`를 검증합니다.
+3. `read,write`로 확장해 생성/수정 경로를 확인합니다.
+4. 삭제 권한은 정책 합의 후 마지막에 부여합니다.
 
 ## 최소 요구사항
 
-- Node.js 20+
-- pnpm 10+ (모노레포 사용 시)
+- Node.js 20 이상
 - Outline API 키
-- MCP 클라이언트 1개 (Codex, Claude Desktop, Cursor 등)
+- MCP 클라이언트(Codex, Claude Desktop, Cursor 등)
 
 ## 다음 단계
 

@@ -1,39 +1,52 @@
 ---
 title: Getting Started
-description: Understand the model quickly and adopt outline-mcp safely.
+description: Understand the core model of outline-mcp and adopt it safely in production.
 ---
 
-## Who this page is for
+## What outline-mcp is
 
-- You are new to outline-mcp
-- You need a safe first rollout plan
-- You want practical defaults, not theory
+`outline-mcp` is an MCP server that maps Outline API capabilities into structured MCP tools and resources.
 
-## What outline-mcp gives you
+In practice, this means your MCP client can call well-defined operations such as reading documents, updating content, managing memberships, exporting collections, or coordinating concurrent edits.
 
-outline-mcp exposes Outline operations as MCP tools with explicit action controls.
+## How a typical request flows
 
-You can use it for:
+A normal request path is:
 
-- Collection and document workflows
-- Template-based document generation
-- Membership and collaboration flows
-- Export pipelines and audit visibility
+1. The MCP client calls a tool.
+2. `outline-mcp` validates input and checks allowed actions.
+3. The server calls the appropriate Outline endpoint.
+4. The response is normalized and returned to the client.
 
-## Safe first rollout
+Because permissions are enforced server-side, you can safely run different clients with different capabilities.
 
-1. Connect one MCP client with read-only policy
-2. Confirm basic reads work (`list_collections`, `read_document`)
-3. Expand to `read,write`
-4. Enable `delete` only when your lifecycle policy is clear
+## Core safety model
+
+The default safety model combines three controls:
+
+- Explicit action gating through `OUTLINE_ALLOWED_ACTIONS`.
+- Conflict-aware document updates through `safe_update_document`.
+- Lease-based ownership for concurrent workers on hot documents.
+
+If you apply these three controls from day one, most accidental mutation issues are prevented before they become incidents.
+
+## Recommended first rollout
+
+Use this rollout order:
+
+1. Start with `read` only.
+2. Validate `list_collections`, `search_documents`, and `read_document`.
+3. Move to `read,write` for controlled creation/update paths.
+4. Add `delete` only when document lifecycle ownership is clear.
 
 ## Minimum requirements
 
-- Node.js 20+
-- pnpm 10+ (for monorepo usage)
-- Outline API key
-- One MCP client (Codex, Claude Desktop, Cursor, etc.)
+You need:
+
+- Node.js 20 or newer.
+- An Outline API key.
+- An MCP client (Codex, Claude Desktop, Cursor, or equivalent).
 
 ## Next step
 
-Go to [Installation](/en/docs/users/installation).
+Continue to [Installation](/en/docs/users/installation).

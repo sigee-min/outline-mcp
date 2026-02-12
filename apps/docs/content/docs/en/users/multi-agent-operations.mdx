@@ -1,45 +1,78 @@
 ---
 title: Multi-Agent Operations
-description: Reliable patterns for concurrent edits, ownership, and control planes.
+description: Reliable patterns for concurrent edits, task partitioning, and failure recovery.
 ---
 
-## Pattern 1: revision-safe update loop
+## Why multi-agent strategy is necessary
 
-1. `read_document`
-2. capture `revision`
-3. call `safe_update_document(expected_revision=...)`
-4. if conflict: re-read, merge, retry
+When multiple workers can touch the same documents, correctness problems usually appear as overwritten content, repeated edits, or ownership confusion.
 
-This protects against silent overwrite in concurrent edits.
+A stable operation model combines role separation, optimistic concurrency checks, and explicit lease ownership.
 
-## Pattern 2: lease ownership for hot documents
+## Pattern 1: Role-based control plane
 
-Use lease tools when multiple workers can target the same document.
+A practical role split looks like this:
+
+- Coordinator: plans tasks, assigns ownership, decides ordering.
+- Worker: performs document-level execution.
+- Auditor: validates revisions, events, and export outputs.
+
+This split keeps each role focused and limits privilege overlap.
+
+## Pattern 2: Revision-safe write loop
+
+For every write operation:
+
+1. `read_document` and capture current revision.
+2. Compute the intended mutation.
+3. Call `safe_update_document` with `expected_revision`.
+4. If conflict is returned, re-read, merge, and retry.
+
+This prevents silent overwrite when another actor changed the document first.
+
+## Pattern 3: Lease ownership for hot documents
+
+For high-contention documents, add lease ownership:
 
 - `acquire_document_lease`
 - `renew_document_lease`
 - `release_document_lease`
 - `get_active_document_lease`
 
-For multi-process coordination, prefer:
+For cross-process coordination, use data attribute strategy:
 
 ```bash
 OUTLINE_LEASE_STRATEGY=data_attribute
 OUTLINE_LEASE_ATTRIBUTE_ID=your_data_attribute_id
 ```
 
-## Pattern 3: role split
+## Pattern 4: Batch orchestration with boundaries
 
-| Role | Focus |
-|---|---|
-| Coordinator | Collection/template orchestration, task fan-out |
-| Worker | Document-level write operations |
-| Auditor | Events/revisions/export checks |
+Batch tools improve throughput but require stronger boundaries.
 
-This split keeps privilege scope clear and reduces accidental cross-role mutations.
+Use batch operations when:
+
+- The target scope is explicit and reviewed.
+- Ordering requirements are known.
+- Rollback strategy is defined.
+
+Prefer dry-run style planning with read tools first, then run batch execution.
+
+## Pattern 5: Resource-first context loading
+
+Before mutation, collect context from resources:
+
+- `outline://collection/{collection_id}/tree`
+- `outline://document/{document_id}`
+- `outline://document/{document_id}/backlinks`
+
+This reduces planning errors from incomplete context.
 
 ## Incident response checklist
 
-- Conflict spikes: validate `safe_update_document` usage path
-- Lease deadlock: inspect TTL policy and renew interval
-- Unexpected mutations: verify `OUTLINE_ALLOWED_ACTIONS` per client
+When something goes wrong:
+
+1. Confirm permission profile and actor intent.
+2. Inspect latest revisions and events.
+3. Verify lease state for contested documents.
+4. Retry only after conflicts are resolved explicitly.

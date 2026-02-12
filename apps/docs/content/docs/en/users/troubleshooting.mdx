@@ -1,42 +1,65 @@
 ---
 title: Troubleshooting
-description: Fast diagnosis for the most common operational problems.
+description: Diagnose common failures quickly with actionable checks and fixes.
 ---
 
-## Symptom → likely cause → fix
+## Quick triage flow
 
-| Symptom | Likely cause | Fix |
+When a problem appears, use this order:
+
+1. Confirm runtime config with `server_info`.
+2. Validate read path (`list_collections`, `read_document`).
+3. Validate permission scope (`OUTLINE_ALLOWED_ACTIONS`).
+4. Validate write paths with controlled test targets.
+
+This order avoids debugging write behavior before basic auth and connectivity are stable.
+
+## Symptom and resolution table
+
+| Symptom | Likely cause | Recommended fix |
 |---|---|---|
-| `PERMISSION_DENIED` | action not enabled | adjust `OUTLINE_ALLOWED_ACTIONS` and restart process |
-| 401/403 from Outline | token/endpoint mismatch or restricted API | verify `OUTLINE_API_KEY`, `OUTLINE_BASE_URL`, workspace token scope |
-| `CONFLICT_DETECTED` on safe update | document changed after your read | re-read document, merge changes, retry with latest revision |
-| Lease conflict | another agent owns active lease | wait/retry or reassign through coordinator flow |
-| Search results stale/missing | generated search artifacts out of date | rebuild docs and restart docs server |
+| `PERMISSION_DENIED` | Action not allowed in current profile | Update `OUTLINE_ALLOWED_ACTIONS` and restart process |
+| `authentication_required` or 401/403 | Invalid token, wrong endpoint, or restricted workspace token | Verify `OUTLINE_API_KEY`, `OUTLINE_BASE_URL`, and token scope |
+| `CONFLICT_DETECTED` in safe update | Revision changed after your last read | Re-read document, merge changes, retry with latest revision |
+| Lease conflict | Another worker owns active lease | Wait/retry, or coordinate ownership reassignment |
+| Export not downloadable yet | File operation still creating/uploading | Poll `get_file_operation` until state is `complete` |
+| Missing optional tools | Capability probe disabled unavailable endpoints | Check probe status and endpoint availability |
+| CI E2E skipped | `OUTLINE_API_KEY` secret not configured | Add GitHub secret and rerun workflow |
 
-## Quick diagnostics
+## Practical diagnostics
 
-### Check runtime config from MCP
+### Check effective runtime
 
-Call:
+Call `server_info` and confirm:
 
-- `server_info`
+- `baseUrl`
+- `allowedActions`
+- `capabilityProbeEnabled`
+- lease strategy and TTL values
 
-Verify:
+### Check read before write
 
-- base URL
-- allowed actions
-- lease strategy
-- capability probe state
-
-### Validate read path first
+Use:
 
 - `list_collections`
+- `search_documents`
 - `read_document`
 
-If read path fails, fix auth/endpoint before testing writes.
+If these fail, resolve endpoint and auth issues first.
 
-### Validate write path safely
+### Check concurrency controls
 
-- create temporary collection
-- run `create_document` + `safe_update_document`
-- clean up with `delete_document` / `delete_collection`
+For contested documents:
+
+- inspect revision path (`read_document` + `safe_update_document`)
+- inspect lease state (`get_active_document_lease`)
+
+## Escalation checklist
+
+When escalating internally, include:
+
+- failing tool name and input shape
+- current `OUTLINE_ALLOWED_ACTIONS`
+- server info output (without secrets)
+- exact error payload
+- timestamp and target document or collection ID

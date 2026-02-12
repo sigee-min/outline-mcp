@@ -47,4 +47,38 @@ describe("probeServerCapabilities", () => {
     expect(capabilities.comments.state).toBe("unknown");
     expect(capabilities.revisionInfo.state).toBe("unknown");
   });
+
+  it("marks 5xx probe responses as unknown", async () => {
+    const client = {
+      probeEndpoint: async () => ({ status: 503 })
+    };
+
+    const capabilities = await probeServerCapabilities(client as never);
+
+    expect(capabilities.comments.state).toBe("unknown");
+    expect(capabilities.templatize.state).toBe("unknown");
+  });
+
+  it("preserves endpoint and status on probe result", async () => {
+    const statuses: Record<string, number | null> = {
+      "comments.list": 404,
+      "revisions.info": 200,
+      "documents.templatize": 400,
+      "dataAttributes.list": null
+    };
+    const client = {
+      probeEndpoint: async (endpoint: string) => ({ status: statuses[endpoint] ?? null })
+    };
+
+    const capabilities = await probeServerCapabilities(client as never);
+
+    expect(capabilities.comments.endpoint).toBe("comments.list");
+    expect(capabilities.comments.status).toBe(404);
+    expect(capabilities.revisionInfo.endpoint).toBe("revisions.info");
+    expect(capabilities.revisionInfo.status).toBe(200);
+    expect(capabilities.templatize.endpoint).toBe("documents.templatize");
+    expect(capabilities.templatize.status).toBe(400);
+    expect(capabilities.dataAttributes.endpoint).toBe("dataAttributes.list");
+    expect(capabilities.dataAttributes.status).toBeUndefined();
+  });
 });

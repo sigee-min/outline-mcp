@@ -1,50 +1,67 @@
 ---
 title: 도구 레퍼런스
-description: 목적별로 바로 찾을 수 있는 MCP 도구 맵입니다.
+description: 최신 기능 기준으로 도구와 리소스를 목적별로 빠르게 찾을 수 있는 가이드입니다.
 ---
 
-## 컬렉션
+이 문서는 기능명을 나열하는 대신, 운영 목적에 맞춰 어떤 도구를 선택해야 하는지 바로 판단할 수 있도록 구성했습니다.
+
+## 기본 워크스페이스/문서 작업
 
 | 사용 목적 | 주요 도구 |
 |---|---|
-| 컬렉션 조회 | `list_collections` |
-| 작업 공간 생성 | `create_collection` |
-| 컬렉션 수정 | `update_collection` |
-| 컬렉션 삭제 | `delete_collection` |
+| 서버 런타임 확인 | `server_info` |
+| 컬렉션 관리 | `list_collections`, `create_collection`, `update_collection`, `delete_collection` |
+| 문서 조회/내보내기 | `search_documents`, `read_document`, `export_document` |
+| 문서 작성/이동 | `create_document`, `update_document`, `move_document`, `safe_update_document` |
+| 문서 수명주기 | `delete_document`, `archive_document`, `unarchive_document`, `restore_document`, `list_archived_documents`, `list_trash` |
 
-## 문서
-
-| 사용 목적 | 주요 도구 |
-|---|---|
-| 문서 검색/조회 | `search_documents`, `read_document` |
-| 문서 생성 | `create_document` |
-| 문서 수정 | `update_document` |
-| 문서 이동 | `move_document` |
-| 문서 삭제 | `delete_document` |
-| 충돌 안전 수정 | `safe_update_document` |
-
-## 템플릿
+## 배치 작업
 
 | 사용 목적 | 주요 도구 |
 |---|---|
-| 템플릿 목록 확인 | `list_templates` |
-| 문서를 템플릿화 | `create_template_from_document` |
-| 템플릿 기반 문서 생성 | `create_document_from_template` |
+| 문서 일괄 생성 | `batch_create_documents` |
+| 문서 일괄 수정 | `batch_update_documents` |
+| 문서 일괄 이동 | `batch_move_documents` |
+| 문서 일괄 보관 | `batch_archive_documents` |
+| 문서 일괄 삭제 | `batch_delete_documents` |
 
-## 협업
+## 구조/참조/AI 지원
 
 | 사용 목적 | 주요 도구 |
 |---|---|
+| 컬렉션 트리 조회 | `get_collection_structure` |
+| 제목으로 문서 ID 찾기 | `get_document_id_from_title` |
+| 백링크 확인 | `get_document_backlinks` |
+| 문서 기반 질문 응답 | `ask_ai_about_documents` |
+
+## 템플릿/협업
+
+| 사용 목적 | 주요 도구 |
+|---|---|
+| 템플릿 워크플로 | `list_templates`, `create_template_from_document`, `create_document_from_template` |
 | 댓글 라이프사이클 | `list_comments`, `get_comment`, `create_comment`, `update_comment`, `delete_comment` |
-| 문서 권한 관리 | `list_document_users`, `list_document_memberships`, `list_document_group_memberships`, `add_document_user`, `remove_document_user`, `add_document_group`, `remove_document_group` |
-| 컬렉션 권한 관리 | `list_collection_memberships`, `list_collection_group_memberships`, `add_collection_user`, `remove_collection_user`, `add_collection_group`, `remove_collection_group` |
+| 멤버십 제어 | `list_document_users`, `list_document_memberships`, `list_document_group_memberships`, `add_document_user`, `remove_document_user`, `add_document_group`, `remove_document_group`, `list_collection_memberships`, `list_collection_group_memberships`, `add_collection_user`, `remove_collection_user`, `add_collection_group`, `remove_collection_group` |
 
-## 운영
+## 감사/내보내기/동시성 제어
 
 | 사용 목적 | 주요 도구 |
 |---|---|
-| 감사 추적 | `list_events`, `list_revisions`, `get_revision` |
-| 내보내기 파이프라인 | `export_collection`, `export_all_collections`, `list_file_operations`, `get_file_operation`, `download_file_operation` |
-| lease 조정 | `acquire_document_lease`, `renew_document_lease`, `release_document_lease`, `get_active_document_lease` |
+| 감사 및 리비전 추적 | `list_events`, `list_revisions`, `get_revision` |
+| export 및 파일 상태 추적 | `export_collection`, `export_all_collections`, `list_file_operations`, `get_file_operation`, `download_file_operation` |
+| lease 기반 소유권 제어 | `acquire_document_lease`, `renew_document_lease`, `release_document_lease`, `get_active_document_lease` |
 
-전체 입출력 상세는 저장소 루트 `apps/mcp/README.md`를 참고하세요.
+## Resource URI
+
+모델이 컨텍스트를 직접 읽어야 할 때 다음 URI를 사용할 수 있습니다.
+
+- `outline://collection/{collection_id}`
+- `outline://collection/{collection_id}/tree`
+- `outline://collection/{collection_id}/documents`
+- `outline://document/{document_id}`
+- `outline://document/{document_id}/backlinks`
+
+## 운영 팁
+
+- 변경 작업 전에는 조회/구조 도구로 먼저 범위를 확인하세요.
+- 배치/수명주기 도구는 소유권과 롤백 전략을 명확히 한 뒤 사용하세요.
+- 멀티 에이전트 쓰기에서는 lease와 `safe_update_document`를 함께 사용하세요.

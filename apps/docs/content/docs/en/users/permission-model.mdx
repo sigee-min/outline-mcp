@@ -1,47 +1,55 @@
 ---
 title: Permission Model
-description: Design agent permissions with clear operational boundaries.
+description: Design clear permission boundaries for agents and human operators.
 ---
 
-## Actions and intent
+## Why permission modeling matters
 
-| Action | Typical usage | Should be default? |
+Most production incidents are not caused by missing features. They are caused by excessive privileges in the wrong place.
+
+`outline-mcp` gives you explicit action controls so each client can receive only the capabilities it needs.
+
+## Action model
+
+| Action | Scope | Typical tools |
 |---|---|---|
-| `read` | search, list, read, audit | Yes |
-| `write` | create/update/move/comment/membership/lease | Usually yes after validation |
-| `delete` | delete documents/comments/collections | No, explicit approval boundary |
-| `admin` | advanced operational controls | Rare |
+| `read` | Non-mutating operations | `list_collections`, `search_documents`, `read_document`, `list_events` |
+| `write` | Mutating but non-destructive operations | `create_document`, `update_document`, `move_document`, comments, memberships, leases |
+| `delete` | Destructive operations | `delete_document`, `delete_comment`, `delete_collection`, batch delete |
+| `admin` | Reserved advanced control | Rarely needed in standard flows |
 
-## Suggested role mapping
+## Recommended role mapping
 
-| Role | Recommended actions | Why |
+| Role | Actions | Reasoning |
 |---|---|---|
-| Reader agent | `read` | No mutation risk |
-| Writer agent | `read,write` | Safe authoring without destructive actions |
-| Operator agent | `read,write,delete` | Lifecycle and cleanup ownership |
+| Reader agent | `read` | Safe default with zero mutation risk |
+| Writer agent | `read,write` | Supports creation/editing without destructive paths |
+| Operator agent | `read,write,delete` | Owns cleanup and lifecycle execution |
 
-## Implementation policy
+## Rollout governance
 
-- Start all new agents with `read`
-- Promote to `read,write` after successful test cycle
-- Grant `delete` only to trusted operator paths
-- Keep permission profile explicit in each client config
+Use a progressive model:
 
-## Example configs
+1. Start every new client at `read`.
+2. Promote to `read,write` only after successful validation.
+3. Grant `delete` only to explicit operator paths.
+4. Review action sets during each incident retrospective.
 
-### Reader
+## Example profiles
+
+### Read-only
 
 ```bash
 OUTLINE_ALLOWED_ACTIONS=read
 ```
 
-### Writer
+### Read and write
 
 ```bash
 OUTLINE_ALLOWED_ACTIONS=read,write
 ```
 
-### Operator
+### Full operator
 
 ```bash
 OUTLINE_ALLOWED_ACTIONS=read,write,delete
@@ -49,4 +57,4 @@ OUTLINE_ALLOWED_ACTIONS=read,write,delete
 
 ## Next step
 
-Go to [Tool Reference](/en/docs/users/tool-reference).
+Continue to [Tool Reference](/en/docs/users/tool-reference).
