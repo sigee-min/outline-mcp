@@ -1,19 +1,21 @@
 ---
 title: 설치
-description: npm 설치 또는 소스 실행 방식으로 outline-mcp를 시작합니다.
+description: npm 설치 또는 소스 실행 방식으로 빠르게 시작합니다.
 ---
 
 ## 옵션 A: npm (권장)
 
+글로벌 설치:
+
 ```bash
-npm i -g @outline-mcp/mcp
+npm i -g @sigeemin/outline-mcp
 outline-mcp
 ```
 
-또는 즉시 실행:
+글로벌 설치 없이 즉시 실행:
 
 ```bash
-npx -y @outline-mcp/mcp
+npx -y @sigeemin/outline-mcp
 ```
 
 ## 옵션 B: 소스 실행 (모노레포)
@@ -22,14 +24,27 @@ npx -y @outline-mcp/mcp
 git clone <repo-url>
 cd outline-mcp
 pnpm install
-pnpm --filter @outline-mcp/mcp build
-pnpm --filter @outline-mcp/mcp dev
+pnpm --filter @sigeemin/outline-mcp build
+pnpm --filter @sigeemin/outline-mcp dev
 ```
 
-## 최소 환경변수
+## 필수 환경변수
 
 ```bash
 OUTLINE_API_KEY=your_api_key
 OUTLINE_BASE_URL=https://app.getoutline.com
 OUTLINE_ALLOWED_ACTIONS=read,write,delete
 ```
+
+## 빠른 검증
+
+소스 실행 기준:
+
+```bash
+pnpm --filter @sigeemin/outline-mcp build
+pnpm e2e:mcp
+```
+
+## 다음 단계
+
+[MCP 클라이언트 연결](/ko/docs/users/mcp-client-setup)로 이동하세요.

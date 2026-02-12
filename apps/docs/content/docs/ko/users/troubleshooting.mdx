@@ -1,49 +1,38 @@
 ---
 title: 트러블슈팅
-description: 자주 발생하는 문제와 실무 해결 방법을 정리합니다.
+description: 운영 중 자주 발생하는 문제를 빠르게 진단하고 해결합니다.
 ---
 
-## `PERMISSION_DENIED`
+## 증상 → 원인 → 해결
 
-원인: 요청한 도구 액션이 `OUTLINE_ALLOWED_ACTIONS`에 없음.
+| 증상 | 가능 원인 | 해결 방법 |
+|---|---|---|
+| `PERMISSION_DENIED` | 요청 액션 미허용 | `OUTLINE_ALLOWED_ACTIONS` 확인 후 프로세스 재시작 |
+| Outline 401/403 | 토큰/엔드포인트 불일치, 제한된 API | `OUTLINE_API_KEY`, `OUTLINE_BASE_URL`, 워크스페이스 토큰 권한 확인 |
+| `CONFLICT_DETECTED` | 마지막 조회 이후 revision 변경 | 문서 재조회 후 머지, 최신 revision으로 재시도 |
+| Lease 충돌 | 다른 에이전트가 lease 보유 | 대기 후 재시도 또는 coordinator 재할당 |
+| 검색 결과 이상 | search artifact 갱신 지연 | docs 재빌드 + docs 서버 재시작 |
 
-해결:
+## 빠른 진단 절차
 
-- 런타임 env 값 확인
-- env 변경 후 MCP 프로세스 재시작
+### MCP 런타임 확인
 
-## Outline API 401/403
+`server_info`를 호출해 다음을 확인하세요.
 
-원인: API 키 오류, 워크스페이스 불일치, 엔드포인트 제한.
+- base URL
+- allowed actions
+- lease strategy
+- capability probe 상태
 
-해결:
+### 조회 경로 우선 확인
 
-- `OUTLINE_API_KEY` 확인
-- `OUTLINE_BASE_URL` 확인
-- Outline 워크스페이스 토큰 권한 확인
+- `list_collections`
+- `read_document`
 
-## `safe_update_document` 충돌
+조회가 깨져 있으면 쓰기 테스트 전에 인증/엔드포인트 문제부터 해결해야 합니다.
 
-원인: 마지막 조회 이후 문서 revision 변경.
+### 안전한 쓰기 검증
 
-해결:
-
-- 문서 재조회
-- 머지 전략 적용
-- 최신 revision으로 재시도
-
-## Lease 충돌
-
-원인: 다른 에이전트가 활성 lease를 보유.
-
-해결:
-
-- 대기 후 재시도
-- 또는 coordinator 로직으로 소유권 재할당
-
-## 검색 인덱스 불일치
-
-해결:
-
-- docs 앱 재빌드
-- docs 서버 재시작으로 생성 아티팩트 갱신
+- 임시 컬렉션 생성
+- `create_document` + `safe_update_document` 실행
+- `delete_document` / `delete_collection`로 정리

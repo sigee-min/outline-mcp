@@ -1,49 +1,42 @@
 ---
 title: Troubleshooting
-description: Common issues and practical fixes.
+description: Fast diagnosis for the most common operational problems.
 ---
 
-## `PERMISSION_DENIED`
+## Symptom → likely cause → fix
 
-Cause: requested tool action is not in `OUTLINE_ALLOWED_ACTIONS`.
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| `PERMISSION_DENIED` | action not enabled | adjust `OUTLINE_ALLOWED_ACTIONS` and restart process |
+| 401/403 from Outline | token/endpoint mismatch or restricted API | verify `OUTLINE_API_KEY`, `OUTLINE_BASE_URL`, workspace token scope |
+| `CONFLICT_DETECTED` on safe update | document changed after your read | re-read document, merge changes, retry with latest revision |
+| Lease conflict | another agent owns active lease | wait/retry or reassign through coordinator flow |
+| Search results stale/missing | generated search artifacts out of date | rebuild docs and restart docs server |
 
-Fix:
+## Quick diagnostics
 
-- verify runtime env values
-- restart MCP process after env changes
+### Check runtime config from MCP
 
-## 401/403 from Outline API
+Call:
 
-Cause: invalid API key, workspace mismatch, or endpoint restrictions.
+- `server_info`
 
-Fix:
+Verify:
 
-- verify `OUTLINE_API_KEY`
-- verify `OUTLINE_BASE_URL`
-- confirm token permission in Outline workspace
+- base URL
+- allowed actions
+- lease strategy
+- capability probe state
 
-## Conflict on `safe_update_document`
+### Validate read path first
 
-Cause: document revision changed after your last read.
+- `list_collections`
+- `read_document`
 
-Fix:
+If read path fails, fix auth/endpoint before testing writes.
 
-- re-read document
-- apply merge strategy
-- retry with latest revision
+### Validate write path safely
 
-## Lease conflict
-
-Cause: another agent holds an active lease.
-
-Fix:
-
-- wait and retry
-- or use coordinator logic to reassign ownership
-
-## Search index mismatch
-
-Fix:
-
-- rebuild docs app
-- restart docs server to refresh generated artifacts
+- create temporary collection
+- run `create_document` + `safe_update_document`
+- clean up with `delete_document` / `delete_collection`

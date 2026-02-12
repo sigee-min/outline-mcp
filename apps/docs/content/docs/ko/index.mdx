@@ -1,21 +1,31 @@
 ---
 title: outline-mcp 문서
-description: outline-mcp 배포 및 운영을 위한 사용자 문서입니다.
+description: setup, 운영, 확장까지 바로 적용 가능한 사용자 문서입니다.
 ---
 
-outline-mcp 사용자 문서에 오신 것을 환영합니다.
+outline-mcp 문서에 오신 것을 환영합니다.
 
-이 가이드는 권한 경계, 멀티 에이전트 안전성, 재현 가능한 테스트를 기준으로 실제 운영 환경에서 서버를 적용할 수 있도록 구성되어 있습니다.
+이 문서는 데모용이 아니라 실제 운영 환경에서 바로 적용할 수 있도록 작성되었습니다.
 
-## 권장 순서
+## 여기서 할 수 있는 것
 
-1. **시작 가이드**부터 확인
-2. **설치**와 **MCP 클라이언트 연결** 완료
-3. 운영 정책에 맞게 **권한 모델** 적용
-4. 일상 운영은 **도구 레퍼런스** 기준으로 진행
-5. 배포 전 **테스트/E2E** 실행
+- MCP 클라이언트를 빠르게 연결
+- 권한 경계(`read`, `write`, `delete`)를 안전하게 설정
+- 문서/컬렉션 워크플로를 실무 기준으로 운영
+- 멀티 에이전트 충돌/lease 흐름 관리
+- 배포 전 E2E 검증
 
-## 문서 섹션
+## 빠른 시작 경로 (권장)
 
-- 사용자 가이드: `/ko/docs/users`
-- 영어 문서: 상단 언어 스위처에서 전환
+1. [시작 가이드](/ko/docs/users/getting-started)
+2. [설치](/ko/docs/users/installation)
+3. [MCP 클라이언트 연결](/ko/docs/users/mcp-client-setup)
+4. [권한 모델](/ko/docs/users/permission-model)
+5. [테스트와 E2E](/ko/docs/users/testing-and-e2e)
+
+## 목적별 진입점
+
+- 처음 도입: [사용자 가이드 개요](/ko/docs/users)
+- 운영 담당자: [환경 설정](/ko/docs/users/configuration)
+- 멀티 에이전트 담당: [멀티 에이전트 운영](/ko/docs/users/multi-agent-operations)
+- 실사용 참조: [도구 레퍼런스](/ko/docs/users/tool-reference)

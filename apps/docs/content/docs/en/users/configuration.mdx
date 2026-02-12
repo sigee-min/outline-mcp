@@ -1,35 +1,56 @@
 ---
 title: Configuration
-description: Environment variables and runtime behavior.
+description: Runtime variables, defaults, and production profiles.
 ---
 
-## Required
+## Core variables
 
-- `OUTLINE_API_KEY`
+| Variable | Default | When to change it |
+|---|---|---|
+| `OUTLINE_API_KEY` | required | Always set |
+| `OUTLINE_BASE_URL` | `https://app.getoutline.com` | Use self-hosted endpoint |
+| `OUTLINE_ALLOWED_ACTIONS` | `read,write,delete` | Restrict per agent role |
+| `OUTLINE_REQUEST_TIMEOUT_MS` | `15000` | Slow networks / strict timeout policy |
+| `OUTLINE_RETRY_COUNT` | `2` | High-latency or unstable upstream |
+| `OUTLINE_ENABLE_CAPABILITY_PROBE` | `true` | Disable only when probing is undesirable |
 
-## Core runtime
+## Lease settings
 
-- `OUTLINE_BASE_URL` (default: `https://app.getoutline.com`)
-- `OUTLINE_ALLOWED_ACTIONS` (default: `read,write,delete`)
-- `OUTLINE_REQUEST_TIMEOUT_MS` (default: `15000`)
-- `OUTLINE_RETRY_COUNT` (default: `2`)
+| Variable | Default | Notes |
+|---|---|---|
+| `OUTLINE_LEASE_STRATEGY` | `auto` | `auto`, `memory`, `data_attribute` |
+| `OUTLINE_LEASE_ATTRIBUTE_ID` | none | Required for `data_attribute` |
+| `OUTLINE_LEASE_DEFAULT_TTL_SECONDS` | `600` | Default lease duration |
+| `OUTLINE_LEASE_MAX_TTL_SECONDS` | `7200` | Hard ceiling for lease extension |
 
-## Capability probe
+## Practical profiles
 
-- `OUTLINE_ENABLE_CAPABILITY_PROBE=true|false`
-
-When enabled, optional features are auto-detected and disabled if unavailable.
-
-## Lease runtime
-
-- `OUTLINE_LEASE_STRATEGY=auto|memory|data_attribute`
-- `OUTLINE_LEASE_ATTRIBUTE_ID` (required for `data_attribute`)
-- `OUTLINE_LEASE_DEFAULT_TTL_SECONDS`
-- `OUTLINE_LEASE_MAX_TTL_SECONDS`
-
-## Example: strict read-only
+### Read-only assistant
 
 ```bash
 OUTLINE_ALLOWED_ACTIONS=read
 OUTLINE_ENABLE_CAPABILITY_PROBE=true
 ```
+
+### Team writer
+
+```bash
+OUTLINE_ALLOWED_ACTIONS=read,write
+```
+
+### Full operator
+
+```bash
+OUTLINE_ALLOWED_ACTIONS=read,write,delete
+```
+
+### Multi-process lease control
+
+```bash
+OUTLINE_LEASE_STRATEGY=data_attribute
+OUTLINE_LEASE_ATTRIBUTE_ID=your_data_attribute_id
+```
+
+## Next step
+
+Go to [Permission Model](/en/docs/users/permission-model).

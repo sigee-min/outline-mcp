@@ -1,35 +1,52 @@
 ---
 title: Permission Model
-description: Map server actions to safe agent capabilities.
+description: Design agent permissions with clear operational boundaries.
 ---
 
-## Action levels
+## Actions and intent
 
-- `read`: list/search/read/audit
-- `write`: create/update/move/comment/membership/lease
-- `delete`: delete document/comment/collection
-- `admin`: reserved for advanced operational controls
+| Action | Typical usage | Should be default? |
+|---|---|---|
+| `read` | search, list, read, audit | Yes |
+| `write` | create/update/move/comment/membership/lease | Usually yes after validation |
+| `delete` | delete documents/comments/collections | No, explicit approval boundary |
+| `admin` | advanced operational controls | Rare |
 
-## Recommended profiles
+## Suggested role mapping
 
-### Reader agent
+| Role | Recommended actions | Why |
+|---|---|---|
+| Reader agent | `read` | No mutation risk |
+| Writer agent | `read,write` | Safe authoring without destructive actions |
+| Operator agent | `read,write,delete` | Lifecycle and cleanup ownership |
+
+## Implementation policy
+
+- Start all new agents with `read`
+- Promote to `read,write` after successful test cycle
+- Grant `delete` only to trusted operator paths
+- Keep permission profile explicit in each client config
+
+## Example configs
+
+### Reader
 
 ```bash
 OUTLINE_ALLOWED_ACTIONS=read
 ```
 
-### Writer agent (no destructive actions)
+### Writer
 
 ```bash
 OUTLINE_ALLOWED_ACTIONS=read,write
 ```
 
-### Operator agent
+### Operator
 
 ```bash
 OUTLINE_ALLOWED_ACTIONS=read,write,delete
 ```
 
-## Safety rule
+## Next step
 
-Treat `delete` as a separate approval boundary, not a default.
+Go to [Tool Reference](/en/docs/users/tool-reference).

@@ -1,29 +1,45 @@
 ---
 title: 멀티 에이전트 운영
-description: 동시 편집과 오케스트레이션을 위한 안전한 패턴을 설명합니다.
+description: 동시 수정, 소유권, 운영 제어를 위한 실전 패턴입니다.
 ---
 
-## 패턴 A: revision 기반 안전 수정
+## 패턴 1: revision-safe update 루프
 
 1. `read_document`
-2. 현재 `revision` 기록
+2. `revision` 확인
 3. `safe_update_document(expected_revision=...)` 호출
-4. 충돌 시 재조회 후 의도적으로 재시도
+4. 충돌 시 재조회/머지/재시도
 
-## 패턴 B: lease 소유권 제어
+이 흐름은 동시 편집에서 silent overwrite를 방지합니다.
 
-여러 에이전트가 같은 문서를 동시에 수정할 수 있다면 lease 도구를 사용하세요.
+## 패턴 2: hot document lease 제어
+
+여러 워커가 같은 문서를 동시에 다룰 수 있다면 lease 도구를 기본으로 사용하세요.
 
 - `acquire_document_lease`
 - `renew_document_lease`
 - `release_document_lease`
+- `get_active_document_lease`
 
-프로세스 간 조정이 필요하면 `data_attribute` 전략을 권장합니다.
+프로세스 간 조정이 필요하면:
 
-## 패턴 C: 역할 분리
+```bash
+OUTLINE_LEASE_STRATEGY=data_attribute
+OUTLINE_LEASE_ATTRIBUTE_ID=your_data_attribute_id
+```
 
-- Coordinator: 컬렉션/템플릿 오케스트레이션
-- Worker: 문서 단위 쓰기 작업
-- Auditor: 이벤트/리비전/export 검증
+## 패턴 3: 역할 분리
 
-이 구조는 권한 오남용을 줄이는 데 효과적입니다.
+| 역할 | 담당 |
+|---|---|
+| Coordinator | 컬렉션/템플릿 오케스트레이션, 작업 분배 |
+| Worker | 문서 단위 쓰기 작업 |
+| Auditor | 이벤트/리비전/export 검증 |
+
+역할을 분리하면 권한 범위가 명확해지고 실수 가능성이 줄어듭니다.
+
+## 장애 대응 체크리스트
+
+- 충돌 급증: `safe_update_document` 경로 적용 여부 확인
+- lease 정체: TTL/renew 주기 점검
+- 예기치 않은 변경: 클라이언트별 `OUTLINE_ALLOWED_ACTIONS` 재검증

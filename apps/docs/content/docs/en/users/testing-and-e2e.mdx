@@ -1,9 +1,9 @@
 ---
 title: Testing and E2E
-description: Validate behavior before production rollout.
+description: Validate correctness before rollout and keep regression risk low.
 ---
 
-## Local validation
+## Local baseline
 
 ```bash
 pnpm test
@@ -11,20 +11,35 @@ pnpm typecheck
 pnpm build
 ```
 
-## Inspector E2E
+## Full E2E run
 
 ```bash
 pnpm e2e:mcp
 ```
 
-## E2E behavior
+## What E2E validates
 
-- Loads `.env`, `.env.local`, `.env.e2e` from root and `apps/mcp`
-- Uses temp collection bootstrap if `OUTLINE_E2E_COLLECTION_ID` is missing
-- Runs cleanup trap to remove test resources
+- Permission matrix behavior
+- Safe update conflict handling
+- Comment and export flows
+- Membership flow (when target IDs are configured)
+- Cleanup policy after test run
 
-## Recommended CI policy
+## Useful E2E environment variables
+
+| Variable | Purpose |
+|---|---|
+| `OUTLINE_E2E_RUN_WRITE` | enable/disable write scenarios |
+| `OUTLINE_E2E_COLLECTION_ID` | fixed test collection (optional) |
+| `OUTLINE_E2E_EXPORT_COLLECTION_ID` | export target collection |
+| `OUTLINE_E2E_MEMBER_COLLECTION_ID` | membership scenario target |
+| `OUTLINE_E2E_MEMBER_USER_ID` | user membership scenario |
+| `OUTLINE_E2E_MEMBER_GROUP_ID` | group membership scenario |
+
+If `OUTLINE_E2E_COLLECTION_ID` is missing, the script provisions and cleans up a temporary collection automatically.
+
+## CI recommendations
 
 - Always run typecheck + tests
 - Run E2E on protected branches
-- Keep `OUTLINE_E2E_RUN_WRITE=true` only in isolated test workspaces
+- Keep E2E write tests in isolated workspaces

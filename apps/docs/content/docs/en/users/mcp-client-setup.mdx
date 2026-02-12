@@ -1,16 +1,16 @@
 ---
 title: MCP Client Setup
-description: Configure your MCP client to launch outline-mcp.
+description: Configure your MCP client with a clean, reproducible baseline.
 ---
 
-## Standard config
+## Baseline config
 
 ```json
 {
   "mcpServers": {
     "outline": {
       "command": "npx",
-      "args": ["-y", "@outline-mcp/mcp"],
+      "args": ["-y", "@sigeemin/outline-mcp"],
       "env": {
         "OUTLINE_API_KEY": "your_api_key",
         "OUTLINE_BASE_URL": "https://app.getoutline.com",
@@ -21,17 +21,39 @@ description: Configure your MCP client to launch outline-mcp.
 }
 ```
 
-## Recommended rollout
+## Environment variants
+
+### Read-only
+
+```json
+{
+  "OUTLINE_ALLOWED_ACTIONS": "read"
+}
+```
+
+### Read/write (no delete)
+
+```json
+{
+  "OUTLINE_ALLOWED_ACTIONS": "read,write"
+}
+```
+
+### Self-hosted Outline
+
+```json
+{
+  "OUTLINE_BASE_URL": "https://outline.your-company.internal"
+}
+```
+
+## Recommended rollout sequence
 
 1. Start with `read`
-2. Verify tool discovery and document reads
-3. Expand to `read,write`
-4. Enable `delete` only when lifecycle policy is clear
+2. Verify tool discovery and read paths
+3. Move to `read,write`
+4. Add `delete` only after your team approves deletion policy
 
-## Self-hosted endpoint
+## Next step
 
-Replace only `OUTLINE_BASE_URL`:
-
-```bash
-OUTLINE_BASE_URL=https://outline.your-company.internal
-```
+Go to [Configuration](/en/docs/users/configuration).

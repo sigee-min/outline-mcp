@@ -1,16 +1,16 @@
 ---
 title: MCP 클라이언트 연결
-description: MCP 클라이언트에서 outline-mcp를 실행하도록 설정합니다.
+description: 재현 가능한 기본 설정으로 MCP 클라이언트를 연결합니다.
 ---
 
-## 기본 설정
+## 기준 설정
 
 ```json
 {
   "mcpServers": {
     "outline": {
       "command": "npx",
-      "args": ["-y", "@outline-mcp/mcp"],
+      "args": ["-y", "@sigeemin/outline-mcp"],
       "env": {
         "OUTLINE_API_KEY": "your_api_key",
         "OUTLINE_BASE_URL": "https://app.getoutline.com",
@@ -21,17 +21,39 @@ description: MCP 클라이언트에서 outline-mcp를 실행하도록 설정합�
 }
 ```
 
+## 환경별 변형
+
+### Read-only
+
+```json
+{
+  "OUTLINE_ALLOWED_ACTIONS": "read"
+}
+```
+
+### Read/write (삭제 금지)
+
+```json
+{
+  "OUTLINE_ALLOWED_ACTIONS": "read,write"
+}
+```
+
+### Self-hosted
+
+```json
+{
+  "OUTLINE_BASE_URL": "https://outline.your-company.internal"
+}
+```
+
 ## 권장 적용 순서
 
 1. `read`부터 시작
-2. 도구 목록/문서 조회 검증
-3. `read,write`로 확장
-4. 삭제 정책이 명확해지면 `delete` 허용
+2. 도구 탐색/조회 흐름 검증
+3. `read,write` 확장
+4. 삭제 정책 승인 후 `delete` 허용
 
-## Self-hosted 엔드포인트
+## 다음 단계
 
-`OUTLINE_BASE_URL`만 변경하면 됩니다.
-
-```bash
-OUTLINE_BASE_URL=https://outline.your-company.internal
-```
+[환경 설정](/ko/docs/users/configuration)으로 이동하세요.

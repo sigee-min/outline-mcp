@@ -1,5 +1,5 @@
 {
-  "name": "@outline-mcp/mcp",
+  "name": "@sigeemin/outline-mcp",
   "version": "0.1.0",
   "description": "MCP stdio server for Outline workspaces",
   "private": false,
@@ -28,7 +28,7 @@
   },
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsup src/index.ts --format esm --dts --clean",
+    "build": "tsup",
     "start": "node dist/index.js",
     "lint": "tsc --noEmit",
     "typecheck": "tsc --noEmit",

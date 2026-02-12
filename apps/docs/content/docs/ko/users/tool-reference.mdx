@@ -1,36 +1,50 @@
 ---
 title: 도구 레퍼런스
-description: 주요 도구 그룹과 사용 시점을 정리합니다.
+description: 목적별로 바로 찾을 수 있는 MCP 도구 맵입니다.
 ---
 
 ## 컬렉션
 
-- `list_collections`
-- `create_collection`
-- `update_collection`
-- `delete_collection`
+| 사용 목적 | 주요 도구 |
+|---|---|
+| 컬렉션 조회 | `list_collections` |
+| 작업 공간 생성 | `create_collection` |
+| 컬렉션 수정 | `update_collection` |
+| 컬렉션 삭제 | `delete_collection` |
 
 ## 문서
 
-- `read_document`, `search_documents`
-- `create_document`, `update_document`, `move_document`
-- `safe_update_document`
-- `delete_document`
+| 사용 목적 | 주요 도구 |
+|---|---|
+| 문서 검색/조회 | `search_documents`, `read_document` |
+| 문서 생성 | `create_document` |
+| 문서 수정 | `update_document` |
+| 문서 이동 | `move_document` |
+| 문서 삭제 | `delete_document` |
+| 충돌 안전 수정 | `safe_update_document` |
 
 ## 템플릿
 
-- `list_templates`
-- `create_template_from_document`
-- `create_document_from_template`
+| 사용 목적 | 주요 도구 |
+|---|---|
+| 템플릿 목록 확인 | `list_templates` |
+| 문서를 템플릿화 | `create_template_from_document` |
+| 템플릿 기반 문서 생성 | `create_document_from_template` |
 
 ## 협업
 
-- 댓글: `list/get/create/update/delete_comment`
-- 멤버십: 문서/컬렉션 user/group add/list/remove
+| 사용 목적 | 주요 도구 |
+|---|---|
+| 댓글 라이프사이클 | `list_comments`, `get_comment`, `create_comment`, `update_comment`, `delete_comment` |
+| 문서 권한 관리 | `list_document_users`, `list_document_memberships`, `list_document_group_memberships`, `add_document_user`, `remove_document_user`, `add_document_group`, `remove_document_group` |
+| 컬렉션 권한 관리 | `list_collection_memberships`, `list_collection_group_memberships`, `add_collection_user`, `remove_collection_user`, `add_collection_group`, `remove_collection_group` |
 
 ## 운영
 
-- Lease: `acquire`, `renew`, `release`, `get_active_document_lease`
-- Export: `export_collection`, `export_all_collections`, `list/get/download_file_operation`
+| 사용 목적 | 주요 도구 |
+|---|---|
+| 감사 추적 | `list_events`, `list_revisions`, `get_revision` |
+| 내보내기 파이프라인 | `export_collection`, `export_all_collections`, `list_file_operations`, `get_file_operation`, `download_file_operation` |
+| lease 조정 | `acquire_document_lease`, `renew_document_lease`, `release_document_lease`, `get_active_document_lease` |
 
-전체 파라미터/응답 스키마는 저장소 루트의 `apps/mcp/README.md`를 확인하세요.
+전체 입출력 상세는 저장소 루트 `apps/mcp/README.md`를 참고하세요.

@@ -1,35 +1,52 @@
 ---
 title: 권한 모델
-description: 서버 액션을 에이전트 역할에 맞게 안전하게 매핑합니다.
+description: 에이전트 권한을 운영 경계에 맞춰 설계하는 방법입니다.
 ---
 
-## 액션 레벨
+## 액션과 의도
 
-- `read`: 조회/검색/감사
-- `write`: 생성/수정/이동/댓글/멤버십/lease
-- `delete`: 문서/댓글/컬렉션 삭제
-- `admin`: 고급 운영 제어용
+| 액션 | 주요 용도 | 기본 권장 여부 |
+|---|---|---|
+| `read` | 조회/검색/감사 | 예 |
+| `write` | 생성/수정/이동/댓글/멤버십/lease | 초기 검증 후 허용 권장 |
+| `delete` | 문서/댓글/컬렉션 삭제 | 아니오, 별도 승인 경계 |
+| `admin` | 고급 운영 제어 | 제한적으로 사용 |
 
-## 권장 프로파일
+## 역할별 권장 매핑
 
-### Reader 에이전트
+| 역할 | 권장 액션 | 이유 |
+|---|---|---|
+| Reader 에이전트 | `read` | 변경 리스크 없음 |
+| Writer 에이전트 | `read,write` | 파괴적 작업 없이 작성 가능 |
+| Operator 에이전트 | `read,write,delete` | 정리/수명주기 책임 |
+
+## 운영 규칙
+
+- 신규 에이전트는 `read`로 시작
+- 1차 검증 후 `read,write` 승격
+- `delete`는 승인된 운영 경로에만 허용
+- 클라이언트별 권한 프로파일을 명시적으로 관리
+
+## 설정 예시
+
+### Reader
 
 ```bash
 OUTLINE_ALLOWED_ACTIONS=read
 ```
 
-### Writer 에이전트 (파괴적 작업 없음)
+### Writer
 
 ```bash
 OUTLINE_ALLOWED_ACTIONS=read,write
 ```
 
-### Operator 에이전트
+### Operator
 
 ```bash
 OUTLINE_ALLOWED_ACTIONS=read,write,delete
 ```
 
-## 안전 원칙
+## 다음 단계
 
-`delete`는 기본 권한이 아니라 별도 승인 경계로 관리하는 것을 권장합니다.
+[도구 레퍼런스](/ko/docs/users/tool-reference)로 이동하세요.

@@ -1,35 +1,56 @@
 ---
 title: 환경 설정
-description: 환경변수와 런타임 동작을 설명합니다.
+description: 런타임 변수, 기본값, 운영 프로파일을 정리합니다.
 ---
 
-## 필수
+## 핵심 변수
 
-- `OUTLINE_API_KEY`
+| 변수 | 기본값 | 변경 시점 |
+|---|---|---|
+| `OUTLINE_API_KEY` | 필수 | 항상 설정 |
+| `OUTLINE_BASE_URL` | `https://app.getoutline.com` | self-hosted 사용 시 |
+| `OUTLINE_ALLOWED_ACTIONS` | `read,write,delete` | 에이전트 역할 분리 시 |
+| `OUTLINE_REQUEST_TIMEOUT_MS` | `15000` | 네트워크 지연/정책 강화 시 |
+| `OUTLINE_RETRY_COUNT` | `2` | 업스트림 불안정 구간 대응 시 |
+| `OUTLINE_ENABLE_CAPABILITY_PROBE` | `true` | probe 비활성화가 필요한 특수 상황 |
 
-## 핵심 런타임
+## Lease 변수
 
-- `OUTLINE_BASE_URL` (기본값: `https://app.getoutline.com`)
-- `OUTLINE_ALLOWED_ACTIONS` (기본값: `read,write,delete`)
-- `OUTLINE_REQUEST_TIMEOUT_MS` (기본값: `15000`)
-- `OUTLINE_RETRY_COUNT` (기본값: `2`)
+| 변수 | 기본값 | 설명 |
+|---|---|---|
+| `OUTLINE_LEASE_STRATEGY` | `auto` | `auto`, `memory`, `data_attribute` |
+| `OUTLINE_LEASE_ATTRIBUTE_ID` | 없음 | `data_attribute`에서 필수 |
+| `OUTLINE_LEASE_DEFAULT_TTL_SECONDS` | `600` | 기본 lease TTL |
+| `OUTLINE_LEASE_MAX_TTL_SECONDS` | `7200` | lease 최대 TTL |
 
-## Capability probe
+## 실무 프로파일 예시
 
-- `OUTLINE_ENABLE_CAPABILITY_PROBE=true|false`
-
-활성화 시 optional endpoint를 자동 탐지하고, 미지원 기능은 비활성화합니다.
-
-## Lease 런타임
-
-- `OUTLINE_LEASE_STRATEGY=auto|memory|data_attribute`
-- `OUTLINE_LEASE_ATTRIBUTE_ID` (`data_attribute`에서 필수)
-- `OUTLINE_LEASE_DEFAULT_TTL_SECONDS`
-- `OUTLINE_LEASE_MAX_TTL_SECONDS`
-
-## 예시: 엄격한 read-only
+### Read-only 어시스턴트
 
 ```bash
 OUTLINE_ALLOWED_ACTIONS=read
 OUTLINE_ENABLE_CAPABILITY_PROBE=true
 ```
+
+### Writer
+
+```bash
+OUTLINE_ALLOWED_ACTIONS=read,write
+```
+
+### Operator
+
+```bash
+OUTLINE_ALLOWED_ACTIONS=read,write,delete
+```
+
+### 다중 프로세스 lease 제어
+
+```bash
+OUTLINE_LEASE_STRATEGY=data_attribute
+OUTLINE_LEASE_ATTRIBUTE_ID=your_data_attribute_id
+```
+
+## 다음 단계
+
+[권한 모델](/ko/docs/users/permission-model)로 이동하세요.

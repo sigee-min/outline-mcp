@@ -1,24 +1,31 @@
 ---
 title: User Guide Overview
-description: End-to-end guide for running outline-mcp in real workflows.
+description: The complete runbook for installation, operations, and troubleshooting.
 ---
 
-Use this section as your operational playbook.
+Use this section as your working runbook.
 
-## Start here
+## Phase 1: First setup
 
 - [Getting Started](/en/docs/users/getting-started)
 - [Installation](/en/docs/users/installation)
 - [MCP Client Setup](/en/docs/users/mcp-client-setup)
 
-## Production operations
+## Phase 2: Production policy
 
 - [Configuration](/en/docs/users/configuration)
 - [Permission Model](/en/docs/users/permission-model)
-- [Tool Reference](/en/docs/users/tool-reference)
 - [Multi-Agent Operations](/en/docs/users/multi-agent-operations)
 
-## Verification and support
+## Phase 3: Daily usage
 
+- [Tool Reference](/en/docs/users/tool-reference)
 - [Testing and E2E](/en/docs/users/testing-and-e2e)
 - [Troubleshooting](/en/docs/users/troubleshooting)
+
+## Suggested first-day checklist
+
+- Install package and run one MCP client successfully
+- Confirm `list_collections` and `read_document` work
+- Start with `OUTLINE_ALLOWED_ACTIONS=read`
+- Expand to `read,write` only after your first validation pass

@@ -1,9 +1,9 @@
 ---
 title: 테스트와 E2E
-description: 운영 반영 전에 동작을 검증하는 방법을 설명합니다.
+description: 배포 전 정확성을 검증하고 회귀 위험을 줄이는 방법입니다.
 ---
 
-## 로컬 검증
+## 로컬 기본 검증
 
 ```bash
 pnpm test
@@ -11,20 +11,35 @@ pnpm typecheck
 pnpm build
 ```
 
-## Inspector E2E
+## 전체 E2E 실행
 
 ```bash
 pnpm e2e:mcp
 ```
 
-## E2E 동작
+## E2E에서 검증하는 것
 
-- 루트와 `apps/mcp`의 `.env`, `.env.local`, `.env.e2e` 자동 로드
-- `OUTLINE_E2E_COLLECTION_ID`가 없으면 임시 컬렉션 bootstrap 사용
-- 테스트 리소스를 cleanup trap으로 정리
+- 권한 매트릭스 동작
+- safe update 충돌 처리
+- 댓글/export 흐름
+- 멤버십 시나리오(대상 ID 설정 시)
+- 테스트 후 cleanup 정책
 
-## 권장 CI 정책
+## 자주 쓰는 E2E 변수
+
+| 변수 | 용도 |
+|---|---|
+| `OUTLINE_E2E_RUN_WRITE` | write 시나리오 on/off |
+| `OUTLINE_E2E_COLLECTION_ID` | 고정 테스트 컬렉션 (옵션) |
+| `OUTLINE_E2E_EXPORT_COLLECTION_ID` | export 대상 컬렉션 |
+| `OUTLINE_E2E_MEMBER_COLLECTION_ID` | 멤버십 시나리오 대상 |
+| `OUTLINE_E2E_MEMBER_USER_ID` | user 멤버십 시나리오 |
+| `OUTLINE_E2E_MEMBER_GROUP_ID` | group 멤버십 시나리오 |
+
+`OUTLINE_E2E_COLLECTION_ID`가 없으면 임시 컬렉션을 자동 생성/정리합니다.
+
+## CI 권장사항
 
 - typecheck + test는 항상 실행
 - 보호 브랜치에서 E2E 실행
-- `OUTLINE_E2E_RUN_WRITE=true`는 격리된 테스트 워크스페이스에서만 사용
+- write E2E는 격리된 테스트 워크스페이스에서만 사용

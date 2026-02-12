@@ -5,11 +5,11 @@
   "packageManager": "pnpm@10.29.3",
   "scripts": {
     "dev:docs": "pnpm --filter @outline-mcp/docs dev",
-    "dev:mcp": "pnpm --filter @outline-mcp/mcp dev",
-    "build": "pnpm --filter @outline-mcp/docs build && pnpm --filter @outline-mcp/mcp build",
-    "lint": "pnpm --filter @outline-mcp/docs lint && pnpm --filter @outline-mcp/mcp lint",
-    "typecheck": "pnpm --filter @outline-mcp/docs types:check && pnpm --filter @outline-mcp/mcp typecheck",
-    "test": "pnpm --filter @outline-mcp/mcp test",
-    "e2e:mcp": "pnpm --filter @outline-mcp/mcp e2e:inspector"
+    "dev:mcp": "pnpm --filter @sigeemin/outline-mcp dev",
+    "build": "pnpm --filter @outline-mcp/docs build && pnpm --filter @sigeemin/outline-mcp build",
+    "lint": "pnpm --filter @outline-mcp/docs lint && pnpm --filter @sigeemin/outline-mcp lint",
+    "typecheck": "pnpm --filter @outline-mcp/docs types:check && pnpm --filter @sigeemin/outline-mcp typecheck",
+    "test": "pnpm --filter @sigeemin/outline-mcp test",
+    "e2e:mcp": "pnpm --filter @sigeemin/outline-mcp e2e:inspector"
   }
 }

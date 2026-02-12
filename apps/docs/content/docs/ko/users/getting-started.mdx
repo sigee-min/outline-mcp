@@ -1,32 +1,39 @@
 ---
 title: 시작 가이드
-description: outline-mcp의 목적과 안전한 도입 방법을 안내합니다.
+description: outline-mcp를 안전하게 도입하기 위한 첫 기준을 정리합니다.
 ---
 
-## 무엇을 해결하나
+## 이 페이지 대상
 
-outline-mcp는 Outline API를 MCP 도구로 노출해, 에이전트가 컬렉션/문서를 명시적 계약에 따라 다룰 수 있게 합니다.
+- outline-mcp를 처음 도입하는 사용자
+- 안전한 초기 롤아웃 전략이 필요한 팀
+- 추상 설명보다 실무 기준이 필요한 운영자
 
-## 핵심 목표
+## outline-mcp가 제공하는 것
 
-- 런타임 권한을 명확히 유지
-- Outline Cloud와 self-hosted를 동일하게 지원
-- 멀티 에이전트 편집 충돌 최소화
-- 테스트 가능한 운영 워크플로 제공
+outline-mcp는 Outline 작업을 MCP 도구로 노출해, 에이전트가 명시적 계약에 따라 동작하게 만듭니다.
 
-## 시작 전 준비
+활용 범위:
+
+- 컬렉션/문서 워크플로
+- 템플릿 기반 생성 흐름
+- 멤버십/협업 제어
+- export 및 감사 추적
+
+## 안전한 첫 롤아웃
+
+1. read-only로 클라이언트 1개 연결
+2. 기본 조회(`list_collections`, `read_document`) 검증
+3. `read,write` 확장
+4. 삭제 정책 합의 후 `delete` 허용
+
+## 최소 요구사항
 
 - Node.js 20+
-- pnpm 10+
+- pnpm 10+ (모노레포 사용 시)
 - Outline API 키
-- MCP 클라이언트(Codex, Claude Desktop, Cursor 등)
+- MCP 클라이언트 1개 (Codex, Claude Desktop, Cursor 등)
 
-## 첫 번째 목표
+## 다음 단계
 
-먼저 read-only로 1개 클라이언트를 연결하세요.
-
-```bash
-OUTLINE_ALLOWED_ACTIONS=read
-```
-
-검증 후 `read,write` 또는 `read,write,delete`로 확장하는 것을 권장합니다.
+[설치](/ko/docs/users/installation)로 이동하세요.

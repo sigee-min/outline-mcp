@@ -8,7 +8,7 @@ Use it from MCP clients (Codex, Claude Desktop, Cursor, etc.) via npm without cl
 Package:
 
 ```bash
-npm i -g @outline-mcp/mcp
+npm i -g @sigeemin/outline-mcp
 ```
 
 Run:
@@ -20,7 +20,7 @@ outline-mcp
 Or run without global install:
 
 ```bash
-npx -y @outline-mcp/mcp
+npx -y @sigeemin/outline-mcp
 ```
 
 ## MCP Client Config (Copy/Paste)
@@ -30,7 +30,7 @@ npx -y @outline-mcp/mcp
   "mcpServers": {
     "outline": {
       "command": "npx",
-      "args": ["-y", "@outline-mcp/mcp"],
+      "args": ["-y", "@sigeemin/outline-mcp"],
       "env": {
         "OUTLINE_API_KEY": "your_api_key",
         "OUTLINE_BASE_URL": "https://app.getoutline.com",
@@ -162,8 +162,8 @@ For full tool parameters and response examples, see [`apps/mcp/README.md`](apps/
 git clone <repo-url>
 cd outline-mcp
 pnpm install
-pnpm --filter @outline-mcp/mcp build
-pnpm --filter @outline-mcp/mcp dev
+pnpm --filter @sigeemin/outline-mcp build
+pnpm --filter @sigeemin/outline-mcp dev
 ```
 
 ## Testing
@@ -185,11 +185,11 @@ E2E notes:
 From this monorepo:
 
 ```bash
-pnpm --filter @outline-mcp/mcp build
-pnpm --filter @outline-mcp/mcp publish --access public
+pnpm --filter @sigeemin/outline-mcp build
+pnpm --filter @sigeemin/outline-mcp publish --access public
 ```
 
-If you do not own the `@outline-mcp` npm scope, update `apps/mcp/package.json` `name` before publishing.
+If you publish under a different npm scope/account, update `apps/mcp/package.json` `name` first.
 
 ## License
 

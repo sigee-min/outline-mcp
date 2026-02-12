@@ -1,29 +1,45 @@
 ---
 title: Multi-Agent Operations
-description: Patterns for safe concurrent editing and orchestration.
+description: Reliable patterns for concurrent edits, ownership, and control planes.
 ---
 
-## Pattern A: revision-safe updates
+## Pattern 1: revision-safe update loop
 
 1. `read_document`
-2. capture current `revision`
-3. call `safe_update_document` with `expected_revision`
-4. on conflict, re-read and retry intentionally
+2. capture `revision`
+3. call `safe_update_document(expected_revision=...)`
+4. if conflict: re-read, merge, retry
 
-## Pattern B: lease ownership
+This protects against silent overwrite in concurrent edits.
 
-Use lease tools when many agents may target the same document in parallel.
+## Pattern 2: lease ownership for hot documents
+
+Use lease tools when multiple workers can target the same document.
 
 - `acquire_document_lease`
 - `renew_document_lease`
 - `release_document_lease`
+- `get_active_document_lease`
 
-Use `data_attribute` strategy for cross-process coordination.
+For multi-process coordination, prefer:
 
-## Pattern C: workflow split
+```bash
+OUTLINE_LEASE_STRATEGY=data_attribute
+OUTLINE_LEASE_ATTRIBUTE_ID=your_data_attribute_id
+```
 
-- Coordinator: collection/template orchestration
-- Worker: document-level write operations
-- Auditor: events/revisions/export checks
+## Pattern 3: role split
 
-This role split reduces accidental privilege expansion.
+| Role | Focus |
+|---|---|
+| Coordinator | Collection/template orchestration, task fan-out |
+| Worker | Document-level write operations |
+| Auditor | Events/revisions/export checks |
+
+This split keeps privilege scope clear and reduces accidental cross-role mutations.
+
+## Incident response checklist
+
+- Conflict spikes: validate `safe_update_document` usage path
+- Lease deadlock: inspect TTL policy and renew interval
+- Unexpected mutations: verify `OUTLINE_ALLOWED_ACTIONS` per client

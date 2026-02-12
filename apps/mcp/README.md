@@ -1,4 +1,4 @@
-# @outline-mcp/mcp
+# @sigeemin/outline-mcp
 
 TypeScript `stdio` MCP server for Outline.
 
@@ -28,13 +28,13 @@ TypeScript `stdio` MCP server for Outline.
 ## Local Dev
 
 ```bash
-pnpm --filter @outline-mcp/mcp dev
+pnpm --filter @sigeemin/outline-mcp dev
 ```
 
 ## Inspector E2E
 
 ```bash
-OUTLINE_API_KEY=... pnpm --filter @outline-mcp/mcp e2e:inspector
+OUTLINE_API_KEY=... pnpm --filter @sigeemin/outline-mcp e2e:inspector
 ```
 
 - 기본 시나리오:

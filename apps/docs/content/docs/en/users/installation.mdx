@@ -1,35 +1,52 @@
 ---
 title: Installation
-description: Install outline-mcp from npm or run from source.
+description: Install from npm or run from source with copy-paste commands.
 ---
 
 ## Option A: npm (recommended)
 
+Install globally:
+
 ```bash
-npm i -g @outline-mcp/mcp
+npm i -g @sigeemin/outline-mcp
 outline-mcp
 ```
 
-Or run directly:
+Or run directly without global install:
 
 ```bash
-npx -y @outline-mcp/mcp
+npx -y @sigeemin/outline-mcp
 ```
 
-## Option B: from source (monorepo)
+## Option B: run from source (monorepo)
 
 ```bash
 git clone <repo-url>
 cd outline-mcp
 pnpm install
-pnpm --filter @outline-mcp/mcp build
-pnpm --filter @outline-mcp/mcp dev
+pnpm --filter @sigeemin/outline-mcp build
+pnpm --filter @sigeemin/outline-mcp dev
 ```
 
-## Minimal environment
+## Required environment variables
 
 ```bash
 OUTLINE_API_KEY=your_api_key
 OUTLINE_BASE_URL=https://app.getoutline.com
 OUTLINE_ALLOWED_ACTIONS=read,write,delete
 ```
+
+## Quick verification
+
+If you run from source, use:
+
+```bash
+pnpm --filter @sigeemin/outline-mcp build
+pnpm e2e:mcp
+```
+
+This verifies tool wiring and runtime behavior.
+
+## Next step
+
+Go to [MCP Client Setup](/en/docs/users/mcp-client-setup).

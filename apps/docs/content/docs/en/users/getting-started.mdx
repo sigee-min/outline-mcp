@@ -1,32 +1,39 @@
 ---
 title: Getting Started
-description: What outline-mcp is and how to adopt it safely.
+description: Understand the model quickly and adopt outline-mcp safely.
 ---
 
-## What it does
+## Who this page is for
 
-outline-mcp exposes Outline APIs as MCP tools, so agents can work with collections and documents through explicit contracts.
+- You are new to outline-mcp
+- You need a safe first rollout plan
+- You want practical defaults, not theory
 
-## Core goals
+## What outline-mcp gives you
 
-- Keep runtime permissions explicit
-- Support Outline Cloud and self-hosted equally
-- Reduce conflicts in multi-agent editing
-- Provide testable operational workflows
+outline-mcp exposes Outline operations as MCP tools with explicit action controls.
 
-## Before you begin
+You can use it for:
+
+- Collection and document workflows
+- Template-based document generation
+- Membership and collaboration flows
+- Export pipelines and audit visibility
+
+## Safe first rollout
+
+1. Connect one MCP client with read-only policy
+2. Confirm basic reads work (`list_collections`, `read_document`)
+3. Expand to `read,write`
+4. Enable `delete` only when your lifecycle policy is clear
+
+## Minimum requirements
 
 - Node.js 20+
-- pnpm 10+
+- pnpm 10+ (for monorepo usage)
 - Outline API key
-- A target MCP client (Codex, Claude Desktop, Cursor, etc.)
+- One MCP client (Codex, Claude Desktop, Cursor, etc.)
 
-## First milestone
+## Next step
 
-Get one client connected with read-only access:
-
-```bash
-OUTLINE_ALLOWED_ACTIONS=read
-```
-
-Then expand to `read,write` or `read,write,delete` only after validation.
+Go to [Installation](/en/docs/users/installation).

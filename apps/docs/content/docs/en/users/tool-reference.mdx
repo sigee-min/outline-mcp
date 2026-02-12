@@ -1,36 +1,50 @@
 ---
 title: Tool Reference
-description: Main tool groups and when to use them.
+description: Use-case oriented map of available MCP tools.
 ---
 
 ## Collections
 
-- `list_collections`
-- `create_collection`
-- `update_collection`
-- `delete_collection`
+| Use case | Main tools |
+|---|---|
+| Browse collections | `list_collections` |
+| Provision working space | `create_collection` |
+| Rename/retune collection settings | `update_collection` |
+| Remove collection | `delete_collection` |
 
 ## Documents
 
-- `read_document`, `search_documents`
-- `create_document`, `update_document`, `move_document`
-- `safe_update_document`
-- `delete_document`
+| Use case | Main tools |
+|---|---|
+| Find and read docs | `search_documents`, `read_document` |
+| Create new docs | `create_document` |
+| Edit existing docs | `update_document` |
+| Move docs across structure | `move_document` |
+| Delete docs | `delete_document` |
+| Conflict-safe update | `safe_update_document` |
 
 ## Templates
 
-- `list_templates`
-- `create_template_from_document`
-- `create_document_from_template`
+| Use case | Main tools |
+|---|---|
+| List reusable templates | `list_templates` |
+| Convert document to template | `create_template_from_document` |
+| Create doc from template | `create_document_from_template` |
 
 ## Collaboration
 
-- Comments: `list/get/create/update/delete_comment`
-- Membership: document/collection user/group add/list/remove
+| Use case | Main tools |
+|---|---|
+| Comment lifecycle | `list_comments`, `get_comment`, `create_comment`, `update_comment`, `delete_comment` |
+| Document user/group access | `list_document_users`, `list_document_memberships`, `list_document_group_memberships`, `add_document_user`, `remove_document_user`, `add_document_group`, `remove_document_group` |
+| Collection user/group access | `list_collection_memberships`, `list_collection_group_memberships`, `add_collection_user`, `remove_collection_user`, `add_collection_group`, `remove_collection_group` |
 
 ## Operations
 
-- Lease: `acquire`, `renew`, `release`, `get_active_document_lease`
-- Export: `export_collection`, `export_all_collections`, `list/get/download_file_operation`
+| Use case | Main tools |
+|---|---|
+| Audit history | `list_events`, `list_revisions`, `get_revision` |
+| Export pipeline | `export_collection`, `export_all_collections`, `list_file_operations`, `get_file_operation`, `download_file_operation` |
+| Lease coordination | `acquire_document_lease`, `renew_document_lease`, `release_document_lease`, `get_active_document_lease` |
 
-For full arguments and response schema, see `apps/mcp/README.md` in the repository root.
+For full input/output detail, check `apps/mcp/README.md` in the repository root.
