@@ -112,20 +112,34 @@ OUTLINE_LEASE_MAX_TTL_SECONDS=7200
 
 </details>
 
-## What You Get
+## Supported Features (At a Glance)
 
-- Collection tools: list/create/update/delete
-- Document tools: search/read/create/update/move/delete
-- Safe concurrent writes: `safe_update_document`
-- Template tools
-- Comment tools
-- Membership tools (user/group for docs + collections)
-- Export tools
-- Lease tools (`acquire`, `renew`, `release`, `get_active`)
+| Area | What you can do | Main MCP tools | Required action |
+|---|---|---|---|
+| Collections | List, create, update, delete collections | `list_collections`, `create_collection`, `update_collection`, `delete_collection` | `read`, `write`, `delete` |
+| Documents | Search/read/create/update/move/delete documents | `search_documents`, `read_document`, `create_document`, `update_document`, `move_document`, `delete_document` | `read`, `write`, `delete` |
+| Safe Concurrency | Prevent blind overwrite on concurrent edits | `safe_update_document` | `write` |
+| Templates | Reuse template workflows | `list_templates`, `create_template_from_document`, `create_document_from_template` | `read`, `write` |
+| Comments | Full comment lifecycle | `list_comments`, `get_comment`, `create_comment`, `update_comment`, `delete_comment` | `read`, `write`, `delete` |
+| Memberships | Manage user/group access for docs and collections | `list_*_memberships`, `add_*`, `remove_*` | `read`, `write` |
+| Audit & Revisions | Track activity and revisions | `list_events`, `list_revisions`, `get_revision` | `read` |
+| Export & File Ops | Run exports and fetch artifact status/URL | `export_collection`, `export_all_collections`, `list_file_operations`, `get_file_operation`, `download_file_operation` | `read` |
+| Lease Control | Acquire/renew/release document lease for agent coordination | `acquire_document_lease`, `renew_document_lease`, `release_document_lease`, `get_active_document_lease` | `write` |
 
-For full tool/argument documentation:
+## Supported Outline APIs (Mapped)
 
-- [`apps/mcp/README.md`](apps/mcp/README.md)
+| API Group | Outline endpoints used by outline-mcp |
+|---|---|
+| Collections | `collections.list`, `collections.info`, `collections.create`, `collections.update`, `collections.delete` |
+| Collection Memberships | `collections.memberships`, `collections.group_memberships`, `collections.add_user`, `collections.remove_user`, `collections.add_group`, `collections.remove_group` |
+| Documents | `documents.info`, `documents.search`, `documents.list`, `documents.create`, `documents.update`, `documents.move`, `documents.delete` |
+| Templates | `documents.templatize`, `documents.list` (`template=true`), `documents.create` (`templateId`) |
+| Document Memberships | `documents.users`, `documents.memberships`, `documents.group_memberships`, `documents.add_user`, `documents.remove_user`, `documents.add_group`, `documents.remove_group` |
+| Comments | `comments.list`, `comments.info`, `comments.create`, `comments.update`, `comments.delete` |
+| Events/Revisions | `events.list`, `revisions.list`, `revisions.info` |
+| Export/File Operations | `collections.export`, `collections.export_all`, `fileOperations.list`, `fileOperations.info`, `fileOperations.redirect` |
+
+For full tool parameters and response examples, see [`apps/mcp/README.md`](apps/mcp/README.md).
 
 ## Key Environment Variables
 
