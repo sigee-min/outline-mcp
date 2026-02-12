@@ -1,0 +1,32 @@
+---
+title: Getting Started
+description: What outline-mcp is and how to adopt it safely.
+---
+
+## What it does
+
+outline-mcp exposes Outline APIs as MCP tools, so agents can work with collections and documents through explicit contracts.
+
+## Core goals
+
+- Keep runtime permissions explicit
+- Support Outline Cloud and self-hosted equally
+- Reduce conflicts in multi-agent editing
+- Provide testable operational workflows
+
+## Before you begin
+
+- Node.js 20+
+- pnpm 10+
+- Outline API key
+- A target MCP client (Codex, Claude Desktop, Cursor, etc.)
+
+## First milestone
+
+Get one client connected with read-only access:
+
+```bash
+OUTLINE_ALLOWED_ACTIONS=read
+```
+
+Then expand to `read,write` or `read,write,delete` only after validation.

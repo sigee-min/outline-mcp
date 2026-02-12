@@ -1,0 +1,30 @@
+---
+title: 테스트와 E2E
+description: 운영 반영 전에 동작을 검증하는 방법을 설명합니다.
+---
+
+## 로컬 검증
+
+```bash
+pnpm test
+pnpm typecheck
+pnpm build
+```
+
+## Inspector E2E
+
+```bash
+pnpm e2e:mcp
+```
+
+## E2E 동작
+
+- 루트와 `apps/mcp`의 `.env`, `.env.local`, `.env.e2e` 자동 로드
+- `OUTLINE_E2E_COLLECTION_ID`가 없으면 임시 컬렉션 bootstrap 사용
+- 테스트 리소스를 cleanup trap으로 정리
+
+## 권장 CI 정책
+
+- typecheck + test는 항상 실행
+- 보호 브랜치에서 E2E 실행
+- `OUTLINE_E2E_RUN_WRITE=true`는 격리된 테스트 워크스페이스에서만 사용

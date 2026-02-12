@@ -1,0 +1,49 @@
+---
+title: Troubleshooting
+description: Common issues and practical fixes.
+---
+
+## `PERMISSION_DENIED`
+
+Cause: requested tool action is not in `OUTLINE_ALLOWED_ACTIONS`.
+
+Fix:
+
+- verify runtime env values
+- restart MCP process after env changes
+
+## 401/403 from Outline API
+
+Cause: invalid API key, workspace mismatch, or endpoint restrictions.
+
+Fix:
+
+- verify `OUTLINE_API_KEY`
+- verify `OUTLINE_BASE_URL`
+- confirm token permission in Outline workspace
+
+## Conflict on `safe_update_document`
+
+Cause: document revision changed after your last read.
+
+Fix:
+
+- re-read document
+- apply merge strategy
+- retry with latest revision
+
+## Lease conflict
+
+Cause: another agent holds an active lease.
+
+Fix:
+
+- wait and retry
+- or use coordinator logic to reassign ownership
+
+## Search index mismatch
+
+Fix:
+
+- rebuild docs app
+- restart docs server to refresh generated artifacts

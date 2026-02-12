@@ -1,0 +1,36 @@
+---
+title: 도구 레퍼런스
+description: 주요 도구 그룹과 사용 시점을 정리합니다.
+---
+
+## 컬렉션
+
+- `list_collections`
+- `create_collection`
+- `update_collection`
+- `delete_collection`
+
+## 문서
+
+- `read_document`, `search_documents`
+- `create_document`, `update_document`, `move_document`
+- `safe_update_document`
+- `delete_document`
+
+## 템플릿
+
+- `list_templates`
+- `create_template_from_document`
+- `create_document_from_template`
+
+## 협업
+
+- 댓글: `list/get/create/update/delete_comment`
+- 멤버십: 문서/컬렉션 user/group add/list/remove
+
+## 운영
+
+- Lease: `acquire`, `renew`, `release`, `get_active_document_lease`
+- Export: `export_collection`, `export_all_collections`, `list/get/download_file_operation`
+
+전체 파라미터/응답 스키마는 저장소 루트의 `apps/mcp/README.md`를 확인하세요.

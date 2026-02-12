@@ -1,0 +1,29 @@
+---
+title: Multi-Agent Operations
+description: Patterns for safe concurrent editing and orchestration.
+---
+
+## Pattern A: revision-safe updates
+
+1. `read_document`
+2. capture current `revision`
+3. call `safe_update_document` with `expected_revision`
+4. on conflict, re-read and retry intentionally
+
+## Pattern B: lease ownership
+
+Use lease tools when many agents may target the same document in parallel.
+
+- `acquire_document_lease`
+- `renew_document_lease`
+- `release_document_lease`
+
+Use `data_attribute` strategy for cross-process coordination.
+
+## Pattern C: workflow split
+
+- Coordinator: collection/template orchestration
+- Worker: document-level write operations
+- Auditor: events/revisions/export checks
+
+This role split reduces accidental privilege expansion.

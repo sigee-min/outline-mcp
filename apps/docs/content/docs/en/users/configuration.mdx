@@ -1,0 +1,35 @@
+---
+title: Configuration
+description: Environment variables and runtime behavior.
+---
+
+## Required
+
+- `OUTLINE_API_KEY`
+
+## Core runtime
+
+- `OUTLINE_BASE_URL` (default: `https://app.getoutline.com`)
+- `OUTLINE_ALLOWED_ACTIONS` (default: `read,write,delete`)
+- `OUTLINE_REQUEST_TIMEOUT_MS` (default: `15000`)
+- `OUTLINE_RETRY_COUNT` (default: `2`)
+
+## Capability probe
+
+- `OUTLINE_ENABLE_CAPABILITY_PROBE=true|false`
+
+When enabled, optional features are auto-detected and disabled if unavailable.
+
+## Lease runtime
+
+- `OUTLINE_LEASE_STRATEGY=auto|memory|data_attribute`
+- `OUTLINE_LEASE_ATTRIBUTE_ID` (required for `data_attribute`)
+- `OUTLINE_LEASE_DEFAULT_TTL_SECONDS`
+- `OUTLINE_LEASE_MAX_TTL_SECONDS`
+
+## Example: strict read-only
+
+```bash
+OUTLINE_ALLOWED_ACTIONS=read
+OUTLINE_ENABLE_CAPABILITY_PROBE=true
+```

@@ -1,0 +1,35 @@
+---
+title: 권한 모델
+description: 서버 액션을 에이전트 역할에 맞게 안전하게 매핑합니다.
+---
+
+## 액션 레벨
+
+- `read`: 조회/검색/감사
+- `write`: 생성/수정/이동/댓글/멤버십/lease
+- `delete`: 문서/댓글/컬렉션 삭제
+- `admin`: 고급 운영 제어용
+
+## 권장 프로파일
+
+### Reader 에이전트
+
+```bash
+OUTLINE_ALLOWED_ACTIONS=read
+```
+
+### Writer 에이전트 (파괴적 작업 없음)
+
+```bash
+OUTLINE_ALLOWED_ACTIONS=read,write
+```
+
+### Operator 에이전트
+
+```bash
+OUTLINE_ALLOWED_ACTIONS=read,write,delete
+```
+
+## 안전 원칙
+
+`delete`는 기본 권한이 아니라 별도 승인 경계로 관리하는 것을 권장합니다.

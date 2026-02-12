@@ -1,0 +1,37 @@
+---
+title: MCP Client Setup
+description: Configure your MCP client to launch outline-mcp.
+---
+
+## Standard config
+
+```json
+{
+  "mcpServers": {
+    "outline": {
+      "command": "npx",
+      "args": ["-y", "@outline-mcp/mcp"],
+      "env": {
+        "OUTLINE_API_KEY": "your_api_key",
+        "OUTLINE_BASE_URL": "https://app.getoutline.com",
+        "OUTLINE_ALLOWED_ACTIONS": "read,write,delete"
+      }
+    }
+  }
+}
+```
+
+## Recommended rollout
+
+1. Start with `read`
+2. Verify tool discovery and document reads
+3. Expand to `read,write`
+4. Enable `delete` only when lifecycle policy is clear
+
+## Self-hosted endpoint
+
+Replace only `OUTLINE_BASE_URL`:
+
+```bash
+OUTLINE_BASE_URL=https://outline.your-company.internal
+```

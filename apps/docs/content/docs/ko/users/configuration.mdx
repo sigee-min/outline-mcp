@@ -1,0 +1,35 @@
+---
+title: 환경 설정
+description: 환경변수와 런타임 동작을 설명합니다.
+---
+
+## 필수
+
+- `OUTLINE_API_KEY`
+
+## 핵심 런타임
+
+- `OUTLINE_BASE_URL` (기본값: `https://app.getoutline.com`)
+- `OUTLINE_ALLOWED_ACTIONS` (기본값: `read,write,delete`)
+- `OUTLINE_REQUEST_TIMEOUT_MS` (기본값: `15000`)
+- `OUTLINE_RETRY_COUNT` (기본값: `2`)
+
+## Capability probe
+
+- `OUTLINE_ENABLE_CAPABILITY_PROBE=true|false`
+
+활성화 시 optional endpoint를 자동 탐지하고, 미지원 기능은 비활성화합니다.
+
+## Lease 런타임
+
+- `OUTLINE_LEASE_STRATEGY=auto|memory|data_attribute`
+- `OUTLINE_LEASE_ATTRIBUTE_ID` (`data_attribute`에서 필수)
+- `OUTLINE_LEASE_DEFAULT_TTL_SECONDS`
+- `OUTLINE_LEASE_MAX_TTL_SECONDS`
+
+## 예시: 엄격한 read-only
+
+```bash
+OUTLINE_ALLOWED_ACTIONS=read
+OUTLINE_ENABLE_CAPABILITY_PROBE=true
+```

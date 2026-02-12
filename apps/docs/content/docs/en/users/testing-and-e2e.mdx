@@ -1,0 +1,30 @@
+---
+title: Testing and E2E
+description: Validate behavior before production rollout.
+---
+
+## Local validation
+
+```bash
+pnpm test
+pnpm typecheck
+pnpm build
+```
+
+## Inspector E2E
+
+```bash
+pnpm e2e:mcp
+```
+
+## E2E behavior
+
+- Loads `.env`, `.env.local`, `.env.e2e` from root and `apps/mcp`
+- Uses temp collection bootstrap if `OUTLINE_E2E_COLLECTION_ID` is missing
+- Runs cleanup trap to remove test resources
+
+## Recommended CI policy
+
+- Always run typecheck + tests
+- Run E2E on protected branches
+- Keep `OUTLINE_E2E_RUN_WRITE=true` only in isolated test workspaces

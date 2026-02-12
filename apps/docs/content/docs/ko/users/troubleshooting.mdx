@@ -1,0 +1,49 @@
+---
+title: 트러블슈팅
+description: 자주 발생하는 문제와 실무 해결 방법을 정리합니다.
+---
+
+## `PERMISSION_DENIED`
+
+원인: 요청한 도구 액션이 `OUTLINE_ALLOWED_ACTIONS`에 없음.
+
+해결:
+
+- 런타임 env 값 확인
+- env 변경 후 MCP 프로세스 재시작
+
+## Outline API 401/403
+
+원인: API 키 오류, 워크스페이스 불일치, 엔드포인트 제한.
+
+해결:
+
+- `OUTLINE_API_KEY` 확인
+- `OUTLINE_BASE_URL` 확인
+- Outline 워크스페이스 토큰 권한 확인
+
+## `safe_update_document` 충돌
+
+원인: 마지막 조회 이후 문서 revision 변경.
+
+해결:
+
+- 문서 재조회
+- 머지 전략 적용
+- 최신 revision으로 재시도
+
+## Lease 충돌
+
+원인: 다른 에이전트가 활성 lease를 보유.
+
+해결:
+
+- 대기 후 재시도
+- 또는 coordinator 로직으로 소유권 재할당
+
+## 검색 인덱스 불일치
+
+해결:
+
+- docs 앱 재빌드
+- docs 서버 재시작으로 생성 아티팩트 갱신

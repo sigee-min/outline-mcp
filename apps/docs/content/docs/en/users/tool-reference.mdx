@@ -1,0 +1,36 @@
+---
+title: Tool Reference
+description: Main tool groups and when to use them.
+---
+
+## Collections
+
+- `list_collections`
+- `create_collection`
+- `update_collection`
+- `delete_collection`
+
+## Documents
+
+- `read_document`, `search_documents`
+- `create_document`, `update_document`, `move_document`
+- `safe_update_document`
+- `delete_document`
+
+## Templates
+
+- `list_templates`
+- `create_template_from_document`
+- `create_document_from_template`
+
+## Collaboration
+
+- Comments: `list/get/create/update/delete_comment`
+- Membership: document/collection user/group add/list/remove
+
+## Operations
+
+- Lease: `acquire`, `renew`, `release`, `get_active_document_lease`
+- Export: `export_collection`, `export_all_collections`, `list/get/download_file_operation`
+
+For full arguments and response schema, see `apps/mcp/README.md` in the repository root.

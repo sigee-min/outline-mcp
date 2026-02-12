@@ -1,0 +1,35 @@
+---
+title: Permission Model
+description: Map server actions to safe agent capabilities.
+---
+
+## Action levels
+
+- `read`: list/search/read/audit
+- `write`: create/update/move/comment/membership/lease
+- `delete`: delete document/comment/collection
+- `admin`: reserved for advanced operational controls
+
+## Recommended profiles
+
+### Reader agent
+
+```bash
+OUTLINE_ALLOWED_ACTIONS=read
+```
+
+### Writer agent (no destructive actions)
+
+```bash
+OUTLINE_ALLOWED_ACTIONS=read,write
+```
+
+### Operator agent
+
+```bash
+OUTLINE_ALLOWED_ACTIONS=read,write,delete
+```
+
+## Safety rule
+
+Treat `delete` as a separate approval boundary, not a default.

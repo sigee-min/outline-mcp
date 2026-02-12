@@ -1,0 +1,15 @@
+{
+  "title": "사용자 가이드",
+  "pages": [
+    "index",
+    "getting-started",
+    "installation",
+    "mcp-client-setup",
+    "configuration",
+    "permission-model",
+    "tool-reference",
+    "multi-agent-operations",
+    "testing-and-e2e",
+    "troubleshooting"
+  ]
+}
