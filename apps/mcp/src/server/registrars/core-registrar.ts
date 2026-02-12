@@ -1,7 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 
-import { shouldEnableCapability } from "../capabilities.js";
+import { shouldEnableCapability, toPublicCapabilities } from "../capabilities.js";
 import type { ToolContext } from "../context.js";
 import {
   mapDataAttributes,
@@ -33,7 +33,7 @@ export function registerCoreTools(server: McpServer, context: ToolContext): void
       retryCount: config.retryCount,
       capabilityProbeEnabled: config.capabilityProbeEnabled,
       lease: config.lease,
-      capabilities
+      capabilities: toPublicCapabilities(capabilities)
     };
 
     return successResult(summary);

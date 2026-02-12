@@ -17,9 +17,9 @@ function logUnavailableCapabilities(capabilities: ServerCapabilities): void {
   }
 
   const message = unavailable
-    .map(([name, value]) => `${name}(${value.endpoint}, status=${value.status ?? "n/a"})`)
+    .map(([name, value]) => `${name}(${value.endpoint})`)
     .join(", ");
-  process.stderr.write(`Capability probe disabled these features: ${message}\n`);
+  process.stderr.write(`Capability probe disabled unsupported features: ${message}\n`);
 }
 
 async function main(): Promise<void> {
