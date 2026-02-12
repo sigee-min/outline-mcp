@@ -1,6 +1,9 @@
 import type { AppConfig } from "../config.js";
 import type {
+  AiAnswerPayload,
   CommentsListResponse,
+  CollectionDocumentNode,
+  CollectionTreeResponse,
   CollectionsListResponse,
   DocumentDataAttribute,
   DocumentStatus,
@@ -163,11 +166,15 @@ export class OutlineClient {
   async listDocuments(params: {
     collectionId?: string;
     parentDocumentId?: string;
+    backlinkDocumentId?: string;
     userId?: string;
     template?: boolean;
+    archived?: boolean;
+    deleted?: boolean;
     statusFilter?: DocumentStatus[];
     limit?: number;
     offset?: number;
+    query?: string;
     sort?: string;
     direction?: SortDirection;
   }): Promise<DocumentsListResponse> {
@@ -255,6 +262,128 @@ export class OutlineClient {
     return {
       success: response.success === true || response.ok === true || typeof response.data !== "undefined",
       document: response.data
+    };
+  }
+
+  async archiveDocument(params: { id: string }): Promise<OutlineDocument> {
+    const response = await this.request<OutlineDocument>("documents.archive", stripUndefined(params));
+    if (!response.data) {
+      throw new OutlineApiError("Outline API response missing archived document payload", 502, "UPSTREAM_ERROR");
+    }
+    return response.data;
+  }
+
+  async unarchiveDocument(params: { id: string }): Promise<OutlineDocument> {
+    const response = await this.request<OutlineDocument>("documents.unarchive", stripUndefined(params));
+    if (!response.data) {
+      throw new OutlineApiError(
+        "Outline API response missing unarchived document payload",
+        502,
+        "UPSTREAM_ERROR"
+      );
+    }
+    return response.data;
+  }
+
+  async restoreDocument(params: { id: string }): Promise<OutlineDocument> {
+    const response = await this.request<OutlineDocument>("documents.restore", stripUndefined(params));
+    if (!response.data) {
+      throw new OutlineApiError("Outline API response missing restored document payload", 502, "UPSTREAM_ERROR");
+    }
+    return response.data;
+  }
+
+  async listArchivedDocuments(params: { limit?: number; offset?: number } = {}): Promise<DocumentsListResponse> {
+    try {
+      const response = await this.request<OutlineDocument[]>("documents.archived", stripUndefined(params));
+      return {
+        data: response.data ?? [],
+        pagination: response.pagination,
+        policies: response.policies
+      };
+    } catch (error) {
+      if (error instanceof OutlineApiError && (error.status === 400 || error.status === 404)) {
+        return this.listDocuments({
+          statusFilter: ["archived"],
+          limit: params.limit,
+          offset: params.offset
+        });
+      }
+      throw error;
+    }
+  }
+
+  async listTrashDocuments(params: {
+    limit?: number;
+    offset?: number;
+    direction?: SortDirection;
+  } = {}): Promise<DocumentsListResponse> {
+    return this.listDocuments({
+      deleted: true,
+      limit: params.limit,
+      offset: params.offset,
+      direction: params.direction
+    });
+  }
+
+  async listDocumentBacklinks(params: {
+    documentId: string;
+    limit?: number;
+    offset?: number;
+    direction?: SortDirection;
+  }): Promise<DocumentsListResponse> {
+    return this.listDocuments({
+      backlinkDocumentId: params.documentId,
+      limit: params.limit,
+      offset: params.offset,
+      direction: params.direction
+    });
+  }
+
+  async getCollectionDocuments(params: { id: string }): Promise<CollectionTreeResponse> {
+    const response = await this.request<CollectionDocumentNode[]>("collections.documents", stripUndefined(params));
+    return {
+      data: response.data ?? [],
+      pagination: response.pagination,
+      policies: response.policies
+    };
+  }
+
+  async exportDocument(params: { id: string }): Promise<string> {
+    const response = await this.request<unknown>("documents.export", stripUndefined(params));
+
+    if (typeof response.data === "string") {
+      return response.data;
+    }
+
+    if (isRecord(response.data) && typeof response.data.markdown === "string") {
+      return response.data.markdown;
+    }
+
+    throw new OutlineApiError("Outline API response missing exported markdown payload", 502, "UPSTREAM_ERROR");
+  }
+
+  async askAiAboutDocuments(params: {
+    query: string;
+    collectionId?: string;
+    documentId?: string;
+  }): Promise<{
+    data: AiAnswerPayload;
+    pagination?: {
+      offset: number;
+      limit: number;
+      total?: number;
+    };
+    policies?: Array<{
+      id: string;
+      abilities: Record<string, boolean | string[]>;
+    }>;
+  }> {
+    const response = await this.request<AiAnswerPayload>("documents.answerQuestion", stripUndefined(params));
+    return {
+      data: response.data ?? {},
+      pagination: response.pagination,
+      policies: response.policies
     };
   }
 

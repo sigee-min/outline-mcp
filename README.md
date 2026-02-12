@@ -118,21 +118,26 @@ OUTLINE_LEASE_MAX_TTL_SECONDS=7200
 |---|---|---|---|
 | Collections | List, create, update, delete collections | `list_collections`, `create_collection`, `update_collection`, `delete_collection` | `read`, `write`, `delete` |
 | Documents | Search/read/create/update/move/delete documents | `search_documents`, `read_document`, `create_document`, `update_document`, `move_document`, `delete_document` | `read`, `write`, `delete` |
+| Document Insights | Resolve IDs, structure, backlinks, and markdown export | `get_collection_structure`, `get_document_id_from_title`, `get_document_backlinks`, `export_document` | `read` |
+| Document Lifecycle | Archive, unarchive, restore, and inspect archived/trash docs | `archive_document`, `unarchive_document`, `restore_document`, `list_archived_documents`, `list_trash` | `read`, `write` |
+| Batch Operations | Execute create/update/move/archive/delete over many docs | `batch_create_documents`, `batch_update_documents`, `batch_move_documents`, `batch_archive_documents`, `batch_delete_documents` | `write`, `delete` |
+| AI Search | Ask natural-language questions over docs in Outline | `ask_ai_about_documents` | `read` |
 | Safe Concurrency | Prevent blind overwrite on concurrent edits | `safe_update_document` | `write` |
 | Templates | Reuse template workflows | `list_templates`, `create_template_from_document`, `create_document_from_template` | `read`, `write` |
 | Comments | Full comment lifecycle | `list_comments`, `get_comment`, `create_comment`, `update_comment`, `delete_comment` | `read`, `write`, `delete` |
 | Memberships | Manage user/group access for docs and collections | `list_*_memberships`, `add_*`, `remove_*` | `read`, `write` |
 | Audit & Revisions | Track activity and revisions | `list_events`, `list_revisions`, `get_revision` | `read` |
 | Export & File Ops | Run exports and fetch artifact status/URL | `export_collection`, `export_all_collections`, `list_file_operations`, `get_file_operation`, `download_file_operation` | `read` |
+| MCP Resources | Read via URI templates without tool calls | `outline://collection/{id}`, `outline://collection/{id}/tree`, `outline://collection/{id}/documents`, `outline://document/{id}`, `outline://document/{id}/backlinks` | `read` |
 | Lease Control | Acquire/renew/release document lease for agent coordination | `acquire_document_lease`, `renew_document_lease`, `release_document_lease`, `get_active_document_lease` | `write` |
 
 ## Supported Outline APIs (Mapped)
 
 | API Group | Outline endpoints used by outline-mcp |
 |---|---|
-| Collections | `collections.list`, `collections.info`, `collections.create`, `collections.update`, `collections.delete` |
+| Collections | `collections.list`, `collections.info`, `collections.create`, `collections.update`, `collections.delete`, `collections.documents` |
 | Collection Memberships | `collections.memberships`, `collections.group_memberships`, `collections.add_user`, `collections.remove_user`, `collections.add_group`, `collections.remove_group` |
-| Documents | `documents.info`, `documents.search`, `documents.list`, `documents.create`, `documents.update`, `documents.move`, `documents.delete` |
+| Documents | `documents.info`, `documents.search`, `documents.list`, `documents.create`, `documents.update`, `documents.move`, `documents.delete`, `documents.archive`, `documents.unarchive`, `documents.restore`, `documents.archived`, `documents.export`, `documents.answerQuestion` |
 | Templates | `documents.templatize`, `documents.list` (`template=true`), `documents.create` (`templateId`) |
 | Document Memberships | `documents.users`, `documents.memberships`, `documents.group_memberships`, `documents.add_user`, `documents.remove_user`, `documents.add_group`, `documents.remove_group` |
 | Comments | `comments.list`, `comments.info`, `comments.create`, `comments.update`, `comments.delete` |

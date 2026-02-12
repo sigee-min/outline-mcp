@@ -115,7 +115,7 @@ export function SiteFooter({ locale }: SiteFooterProps) {
         </div>
 
         <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-fd-border/70 pt-5 text-xs text-fd-muted-foreground">
-          <p>© {new Date().getFullYear()} outline-mcp. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} MINSEOK CHOI. Licensed under the MIT License.</p>
           <a
             href={githubUrl}
             target="_blank"

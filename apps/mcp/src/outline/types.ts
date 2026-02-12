@@ -56,6 +56,15 @@ export type OutlineDocument = {
   dataAttributes?: DocumentDataAttribute[] | null;
 };
 
+export type CollectionDocumentNode = {
+  id: string;
+  title: string;
+  children?: CollectionDocumentNode[];
+  parentDocumentId?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
 export type SearchHit = {
   context?: string;
   ranking?: number;
@@ -124,6 +133,8 @@ export type FileOperation = {
   createdAt?: string;
 };
 
+export type AiAnswerPayload = Record<string, unknown>;
+
 export type EnvelopeResponse<T> = {
   data: T;
   pagination?: Pagination;
@@ -145,3 +156,5 @@ export type CommentsListResponse = EnvelopeResponse<OutlineComment[]>;
 export type MembershipsListResponse = EnvelopeResponse<Membership[]>;
 
 export type FileOperationsListResponse = EnvelopeResponse<FileOperation[]>;
+
+export type CollectionTreeResponse = EnvelopeResponse<CollectionDocumentNode[]>;

@@ -67,6 +67,30 @@ export function registerCoreTools(server: McpServer, context: ToolContext): void
   );
 
   server.tool(
+    "get_collection_structure",
+    "Get hierarchical document tree of a collection",
+    {
+      collection_id: z.string().min(1)
+    },
+    async ({ collection_id }) => {
+      try {
+        assertAllowedAction(config.allowedActions, "read");
+
+        const tree = await client.getCollectionDocuments({ id: collection_id });
+
+        return successResult({
+          ok: true,
+          tool: "get_collection_structure",
+          collectionId: collection_id,
+          tree
+        });
+      } catch (error) {
+        return errorResult(error);
+      }
+    }
+  );
+
+  server.tool(
     "create_collection",
     "Create a collection",
     {
@@ -203,6 +227,32 @@ export function registerCoreTools(server: McpServer, context: ToolContext): void
   );
 
   server.tool(
+    "export_document",
+    "Export one document as markdown text",
+    {
+      document_id: z.string().min(1)
+    },
+    async ({ document_id }) => {
+      try {
+        assertAllowedAction(config.allowedActions, "read");
+
+        const markdown = await client.exportDocument({
+          id: document_id
+        });
+
+        return successResult({
+          ok: true,
+          tool: "export_document",
+          documentId: document_id,
+          markdown
+        });
+      } catch (error) {
+        return errorResult(error);
+      }
+    }
+  );
+
+  server.tool(
     "search_documents",
     "Search documents with filtering, sorting and pagination",
     {
@@ -252,6 +302,109 @@ export function registerCoreTools(server: McpServer, context: ToolContext): void
         });
 
         return successResult(result);
+      } catch (error) {
+        return errorResult(error);
+      }
+    }
+  );
+
+  server.tool(
+    "get_document_id_from_title",
+    "Find document ID by title query (exact-match prioritized)",
+    {
+      query: z.string().min(1),
+      collection_id: z.string().optional(),
+      limit: z.number().int().min(1).max(50).optional()
+    },
+    async ({ query, collection_id, limit = 25 }) => {
+      try {
+        assertAllowedAction(config.allowedActions, "read");
+
+        const result = await client.searchDocuments({
+          query,
+          collectionId: collection_id,
+          limit,
+          offset: 0
+        });
+
+        const exact = result.data.find(
+          (hit) => hit.document?.title?.trim().toLowerCase() === query.trim().toLowerCase()
+        );
+        const best = exact ?? result.data[0];
+
+        return successResult({
+          ok: !!best,
+          tool: "get_document_id_from_title",
+          query,
+          collectionId: collection_id,
+          documentId: best?.document?.id,
+          title: best?.document?.title,
+          exactMatch: !!exact
+        });
+      } catch (error) {
+        return errorResult(error);
+      }
+    }
+  );
+
+  server.tool(
+    "get_document_backlinks",
+    "List documents that link to a given document",
+    {
+      document_id: z.string().min(1),
+      limit: z.number().int().min(1).max(100).optional(),
+      offset: z.number().int().min(0).optional(),
+      direction: directionEnum.optional()
+    },
+    async ({ document_id, limit = 25, offset = 0, direction }) => {
+      try {
+        assertAllowedAction(config.allowedActions, "read");
+
+        const result = await client.listDocumentBacklinks({
+          documentId: document_id,
+          limit,
+          offset,
+          direction: toDirection(direction)
+        });
+
+        return successResult({
+          ok: true,
+          tool: "get_document_backlinks",
+          documentId: document_id,
+          backlinks: result
+        });
+      } catch (error) {
+        return errorResult(error);
+      }
+    }
+  );
+
+  server.tool(
+    "ask_ai_about_documents",
+    "Ask Outline AI a question scoped to documents/collection",
+    {
+      question: z.string().min(1),
+      collection_id: z.string().optional(),
+      document_id: z.string().optional()
+    },
+    async ({ question, collection_id, document_id }) => {
+      try {
+        assertAllowedAction(config.allowedActions, "read");
+
+        const answer = await client.askAiAboutDocuments({
+          query: question,
+          collectionId: collection_id,
+          documentId: document_id
+        });
+
+        return successResult({
+          ok: true,
+          tool: "ask_ai_about_documents",
+          question,
+          collectionId: collection_id,
+          documentId: document_id,
+          answer
+        });
       } catch (error) {
         return errorResult(error);
       }
