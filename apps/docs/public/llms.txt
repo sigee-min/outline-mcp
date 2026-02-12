@@ -1,0 +1,24 @@
+# outline-mcp docs
+
+home: /en
+full-text: /llms-full.txt
+
+## Primary Guides
+- /en/docs
+- /en/docs/users/getting-started
+- /en/docs/users/installation
+- /en/docs/users/mcp-client-setup
+- /en/docs/users/configuration
+- /en/docs/users/tool-reference
+- /en/docs/users/testing-and-e2e
+- /en/docs/users/troubleshooting
+
+## 한국어 가이드
+- /ko/docs
+- /ko/docs/users/getting-started
+- /ko/docs/users/installation
+- /ko/docs/users/mcp-client-setup
+- /ko/docs/users/configuration
+- /ko/docs/users/tool-reference
+- /ko/docs/users/testing-and-e2e
+- /ko/docs/users/troubleshooting

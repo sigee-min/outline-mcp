@@ -1,11 +1,19 @@
-import { getPageImage, source } from '@/lib/source';
+import { source } from '@/lib/source';
 import { DocsBody, DocsDescription, DocsPage, DocsTitle } from 'fumadocs-ui/layouts/docs/page';
 import { notFound } from 'next/navigation';
 import { getMDXComponents } from '@/mdx-components';
 import type { Metadata } from 'next';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
 import { isLocale } from '@/lib/i18n';
-import { localizedAlternates, localizedPath, openGraphAlternateLocales, openGraphLocale, siteName, siteTitle } from '@/lib/site';
+import {
+  defaultOpenGraphImage,
+  localizedAlternates,
+  localizedPath,
+  openGraphAlternateLocales,
+  openGraphLocale,
+  siteName,
+  siteTitle,
+} from '@/lib/site';
 
 type DocsPageProps = {
   params: Promise<{
@@ -50,7 +58,7 @@ export async function generateMetadata({ params }: DocsPageProps): Promise<Metad
   if (!page) notFound();
   const docsSuffix = slug?.length ? `/docs/${slug.join('/')}` : '/docs';
   const pageUrl = localizedPath(lang, docsSuffix);
-  const pageImage = getPageImage(page).url;
+  const pageImage = defaultOpenGraphImage;
   const description = page.data.description;
 
   return {

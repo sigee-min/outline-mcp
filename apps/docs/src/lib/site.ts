@@ -60,4 +60,4 @@ export function localizedAlternates(suffix = ''): Record<string, string> {
   };
 }
 
-export const defaultOpenGraphImage = withBasePath('/en/og/docs/image.png');
+export const defaultOpenGraphImage = withBasePath('/og-default.svg');

@@ -1,0 +1,37 @@
+# outline-mcp documentation corpus
+
+This static docs site is exported for Cloudflare Pages.
+It contains user-facing guides for:
+
+- Installation and runtime setup
+- MCP client integration
+- Permission model and safety
+- Multi-agent operation patterns
+- Tool references and troubleshooting
+
+## Canonical root
+/en
+
+## Main docs entries
+/en/docs
+/en/docs/users/getting-started
+/en/docs/users/installation
+/en/docs/users/mcp-client-setup
+/en/docs/users/configuration
+/en/docs/users/multi-agent-operations
+/en/docs/users/permission-model
+/en/docs/users/tool-reference
+/en/docs/users/testing-and-e2e
+/en/docs/users/troubleshooting
+
+## Korean docs entries
+/ko/docs
+/ko/docs/users/getting-started
+/ko/docs/users/installation
+/ko/docs/users/mcp-client-setup
+/ko/docs/users/configuration
+/ko/docs/users/multi-agent-operations
+/ko/docs/users/permission-model
+/ko/docs/users/tool-reference
+/ko/docs/users/testing-and-e2e
+/ko/docs/users/troubleshooting
