@@ -3,6 +3,13 @@
 A production-focused MCP (`stdio`) server for Outline.
 Use it from MCP clients (Codex, Claude Desktop, Cursor, etc.) via npm without cloning this repo.
 
+## What Is Outline?
+
+[Outline](https://www.getoutline.com) is a collaborative knowledge base and documentation platform for teams.
+It is commonly used for internal docs, runbooks, product specs, onboarding guides, and shared process playbooks.
+
+`outline-mcp` connects MCP clients to Outline workspaces so agents can safely read, update, and manage this knowledge through structured tools.
+
 ## Install From npm
 
 Package:

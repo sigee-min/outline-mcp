@@ -2,6 +2,13 @@
 
 TypeScript MCP (`stdio`) server for Outline Cloud and self-hosted Outline.
 
+## What Is Outline?
+
+[Outline](https://www.getoutline.com) is a collaborative team knowledge base.
+Teams use Outline to write and organize internal documentation such as handbooks, runbooks, product docs, and operational playbooks.
+
+This package exposes that workspace through MCP so agents can interact with Outline content in a controlled, automatable way.
+
 ## Architecture
 
 - `src/domain`: domain models
@@ -65,4 +72,3 @@ OUTLINE_API_KEY=... pnpm --filter @sigeemin/outline-mcp e2e:inspector
 - Loads `.env`, `.env.local`, `.env.e2e` from repo root, then `apps/mcp`
 - Shell env values always take precedence
 - Scenarios include permission matrix, safe-update conflict detection, lease contention, comments negative cases, export flow, membership roundtrip, and cleanup rollback
-
