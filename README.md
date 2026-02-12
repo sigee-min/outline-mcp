@@ -185,16 +185,13 @@ E2E notes:
 - Loads `.env`, `.env.local`, `.env.e2e` from root and `apps/mcp`
 - If `OUTLINE_E2E_COLLECTION_ID` is not set, it creates a temporary collection and cleans it up automatically
 
-## Publishing
+CI E2E notes:
 
-From this monorepo:
-
-```bash
-pnpm --filter @sigeemin/outline-mcp build
-pnpm --filter @sigeemin/outline-mcp publish --access public
-```
-
-If you publish under a different npm scope/account, update `apps/mcp/package.json` `name` first.
+- `.github/workflows/ci.yml` runs MCP inspector E2E as a separate job when `OUTLINE_API_KEY` secret exists
+- Default CI mode is read-focused (`OUTLINE_E2E_RUN_WRITE=false`), configurable via GitHub Actions variable
+- Recommended GitHub settings:
+  - Secret: `OUTLINE_API_KEY` (required)
+  - Variables (optional): `OUTLINE_BASE_URL`, `OUTLINE_E2E_RUN_WRITE`, `OUTLINE_E2E_COLLECTION_ID`, `OUTLINE_E2E_MEMBER_COLLECTION_ID`, `OUTLINE_E2E_MEMBER_USER_ID`, `OUTLINE_E2E_MEMBER_GROUP_ID`
 
 ## License
 

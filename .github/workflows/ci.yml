@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.29.3
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build
+
+  e2e-mcp:
+    name: E2E (MCP Inspector)
+    runs-on: ubuntu-latest
+    needs: validate
+    timeout-minutes: 25
+    if: ${{ secrets.OUTLINE_API_KEY != '' }}
+    env:
+      OUTLINE_API_KEY: ${{ secrets.OUTLINE_API_KEY }}
+      OUTLINE_BASE_URL: ${{ vars.OUTLINE_BASE_URL }}
+      OUTLINE_ALLOWED_ACTIONS: ${{ vars.OUTLINE_ALLOWED_ACTIONS }}
+      OUTLINE_ENABLE_CAPABILITY_PROBE: ${{ vars.OUTLINE_ENABLE_CAPABILITY_PROBE }}
+      OUTLINE_E2E_COLLECTION_ID: ${{ vars.OUTLINE_E2E_COLLECTION_ID }}
+      OUTLINE_E2E_EXPORT_COLLECTION_ID: ${{ vars.OUTLINE_E2E_EXPORT_COLLECTION_ID }}
+      OUTLINE_E2E_MEMBER_COLLECTION_ID: ${{ vars.OUTLINE_E2E_MEMBER_COLLECTION_ID }}
+      OUTLINE_E2E_MEMBER_USER_ID: ${{ vars.OUTLINE_E2E_MEMBER_USER_ID }}
+      OUTLINE_E2E_MEMBER_GROUP_ID: ${{ vars.OUTLINE_E2E_MEMBER_GROUP_ID }}
+      OUTLINE_E2E_EXPORT_ALL: ${{ vars.OUTLINE_E2E_EXPORT_ALL }}
+      OUTLINE_E2E_CLEANUP_ALLOWED_ACTIONS: ${{ vars.OUTLINE_E2E_CLEANUP_ALLOWED_ACTIONS }}
+      OUTLINE_E2E_RUN_WRITE: ${{ vars.OUTLINE_E2E_RUN_WRITE }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.29.3
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run MCP E2E
+        run: |
+          export OUTLINE_E2E_RUN_WRITE="${OUTLINE_E2E_RUN_WRITE:-false}"
+          export OUTLINE_ALLOWED_ACTIONS="${OUTLINE_ALLOWED_ACTIONS:-read,write,delete}"
+          export OUTLINE_ENABLE_CAPABILITY_PROBE="${OUTLINE_ENABLE_CAPABILITY_PROBE:-true}"
+          export OUTLINE_E2E_CLEANUP_ALLOWED_ACTIONS="${OUTLINE_E2E_CLEANUP_ALLOWED_ACTIONS:-read,write,delete}"
+          pnpm e2e:mcp

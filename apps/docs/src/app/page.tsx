@@ -1,5 +1,6 @@
 'use client';
 import { useEffect } from 'react';
+import Link from 'next/link';
 
 export default function RootPage() {
   useEffect(() => {
@@ -10,9 +11,9 @@ export default function RootPage() {
     <main className="mx-auto flex min-h-screen max-w-3xl items-center justify-center px-6 py-10 text-center">
       <p>
         Redirecting to docs home...
-        <a className="ml-2 underline" href="/en">
+        <Link className="ml-2 underline" href="/en">
           Continue
-        </a>
+        </Link>
       </p>
     </main>
   );

@@ -6,10 +6,16 @@
   "scripts": {
     "dev:docs": "pnpm --filter @outline-mcp/docs dev",
     "dev:mcp": "pnpm --filter @sigeemin/outline-mcp dev",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "pnpm --filter @sigeemin/outline-mcp exec npm publish --access public --provenance",
     "build": "pnpm --filter @outline-mcp/docs build && pnpm --filter @sigeemin/outline-mcp build",
     "lint": "pnpm --filter @outline-mcp/docs lint && pnpm --filter @sigeemin/outline-mcp lint",
     "typecheck": "pnpm --filter @outline-mcp/docs types:check && pnpm --filter @sigeemin/outline-mcp typecheck",
     "test": "pnpm --filter @sigeemin/outline-mcp test",
     "e2e:mcp": "pnpm --filter @sigeemin/outline-mcp e2e:inspector"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.7"
   }
 }
