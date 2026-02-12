@@ -3,6 +3,12 @@
 A production-focused MCP (`stdio`) server for Outline.
 Use it from MCP clients (Codex, Claude Desktop, Cursor, etc.) via npm without cloning this repo.
 
+[![npm version](https://img.shields.io/npm/v/%40sigeemin%2Foutline-mcp?label=npm&logo=npm)](https://www.npmjs.com/package/@sigeemin/outline-mcp)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D20-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![CI](https://github.com/sigee-min/outline-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/sigee-min/outline-mcp/actions/workflows/ci.yml)
+[![Docker](https://img.shields.io/badge/docker-no%20official%20image-lightgrey?logo=docker)](https://github.com/sigee-min/outline-mcp)
+
 ## What Is Outline?
 
 [Outline](https://www.getoutline.com) is a collaborative knowledge base and documentation platform for teams.
