@@ -157,8 +157,6 @@ OUTLINE_LEASE_MAX_TTL_SECONDS=7200
 | Events/Revisions | `events.list`, `revisions.list`, `revisions.info` |
 | Export/File Operations | `collections.export`, `collections.export_all`, `fileOperations.list`, `fileOperations.info`, `fileOperations.redirect` |
 
-For full tool parameters and response examples, see [`apps/mcp/README.md`](apps/mcp/README.md).
-
 ## Key Environment Variables
 
 | Variable | Default | Description |

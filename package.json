@@ -4,14 +4,13 @@
   "private": true,
   "packageManager": "pnpm@10.29.3",
   "scripts": {
-    "dev:docs": "pnpm --filter @outline-mcp/docs dev",
     "dev:mcp": "pnpm --filter @sigee-min/outline-mcp dev",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "pnpm --filter @sigee-min/outline-mcp exec npm publish --access public --provenance",
-    "build": "pnpm --filter @outline-mcp/docs build && pnpm --filter @sigee-min/outline-mcp build",
-    "lint": "pnpm --filter @outline-mcp/docs lint && pnpm --filter @sigee-min/outline-mcp lint",
-    "typecheck": "pnpm --filter @outline-mcp/docs types:check && pnpm --filter @sigee-min/outline-mcp typecheck",
+    "build": "pnpm --filter @sigee-min/outline-mcp build",
+    "lint": "pnpm --filter @sigee-min/outline-mcp lint",
+    "typecheck": "pnpm --filter @sigee-min/outline-mcp typecheck",
     "test": "pnpm --filter @sigee-min/outline-mcp test",
     "e2e:mcp": "pnpm --filter @sigee-min/outline-mcp e2e:inspector"
   },
